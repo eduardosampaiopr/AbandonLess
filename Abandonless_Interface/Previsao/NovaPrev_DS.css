@@ -1,0 +1,105 @@
+.nav-item{
+    background-color: #EBEBEB;
+    margin: 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-size:x-large;
+}
+.nav-link.active {
+    background-color: #C8C5C5 !important; /* Fundo laranja */
+    color: black !important; 
+    border-radius: 10px;
+}
+.nav-item:hover{
+    background-color: #8d8d8d;
+}
+
+.col-auto{
+    background-color: #5299E5;
+    min-width: 25%;
+    align-items: center;
+}
+
+.LogOut {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;  
+    padding-left: 10px; 
+    font-size:larger;
+}
+
+.iconlog{
+    max-height: 1.5em;
+}
+
+body {
+    font-family: 'Montserrat';
+}
+
+.icon-size {
+    max-height: 4em; 
+    width: auto;  
+}
+
+.filtro{
+    background-color: #D9D9D9;
+    border-radius: 10px;
+}
+
+.table thead th {
+    background-color: #5299E5 !important;
+    color: white !important;
+    position: sticky;
+    top: 0px;
+}
+
+.btn{
+    background-color: #5299E5 !important;
+    border-color: #5299E5;
+}
+
+
+.table{
+    border-collapse: collapse;
+}
+
+.table-responsive{
+    height: 25em;
+    overflow-y: auto;
+    
+}
+
+
+
+#btn-back{
+    background-color: #D9D9D9 !important;
+    border-color: #D9D9D9;
+}
+
+.col-id {
+    width: 10px; /* Pequeno, pois ID é um número */
+    text-align: center;
+}
+
+.col-ficheiro {
+    width: 5%; /* Mais espaço para nomes longos */
+}
+
+.col-registos {
+    width: 20%; /* Ajustável */
+}
+
+.col-data {
+    width: 25%; /* Ajustável */
+}
+
+.col-botao {
+    width: 0px ; /* Mantém o tamanho do botão */
+    white-space: nowrap; /* Evita quebra de linha */
+}
+
+#selecionar{
+    min-width: 13em;
+}
+
+
