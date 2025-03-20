@@ -78,80 +78,40 @@
                     <table class="table table-bordered mt-4 table-fixed">
                         <thead>
                             <tr class="first">
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Algoritmo</th>
+                                <th scope="col">Dataset</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Resultado</th>
                             </tr>
                         </thead>
                         <tbody class="table-body">
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                <th scope="row">Reg_linearV3.2</th>
+                                <td>Uluf2025</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
+                                <th scope="row">Reg_linearV3.2</th>
+                                <td>Uluf2025</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
+                                <th scope="row">Reg_linearV3.2</th>
+                                <td>coco</td>
+                                <td>03-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
+                            </tr> <tr>
+                                <th scope="row">Reg_linearV3.2</th>
+                                <td>Uluf2025</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
+                            </tr> <tr>
+                                <th scope="row">Reg_linearV3.2</th>
+                                <td>Uluf2025</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
                             </tr>
                            
                         </tbody>
@@ -173,3 +133,41 @@
 
 </body>
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona o formulário pelo ID
+        document.querySelector("#filtro-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // 🚀 Evita que a página seja recarregada
+
+            // Captura os valores digitados nos filtros
+            let algoritmoFiltro = document.getElementById("campo1").value.toLowerCase().trim();
+            let datasetFiltro = document.getElementById("campo2").value.toLowerCase().trim();
+            let dataFiltro = document.getElementById("campo3").value.trim(); // Já vem no formato "YYYY-MM-DD"
+
+            let linhas = document.querySelector("tbody").querySelectorAll("tr");
+
+            linhas.forEach(linha => {
+                let algoritmo = linha.children[0].textContent.toLowerCase().trim();
+                let dataset = linha.children[1].textContent.toLowerCase().trim();
+                let dataTabela = linha.children[2].textContent.trim(); // Está como "DD-MM-YYYY" ou similar
+
+                // Converte a data da tabela para "YYYY-MM-DD" para comparação correta
+                let partesData = dataTabela.split("-");
+                let dataNormalizada = partesData.reverse().join("-"); // Transforma "DD-MM-YYYY" em "YYYY-MM-DD"
+
+                let correspondeAlgoritmo = algoritmo.includes(algoritmoFiltro) || algoritmoFiltro === "";
+                let correspondeDataset = dataset.includes(datasetFiltro) || datasetFiltro === "";
+                let correspondeData = (dataNormalizada === dataFiltro) || dataFiltro === "";
+
+                // Exibe ou oculta a linha conforme os filtros
+                if (correspondeAlgoritmo && correspondeDataset && correspondeData) {
+                    linha.style.display = "";
+                } else {
+                    linha.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
+

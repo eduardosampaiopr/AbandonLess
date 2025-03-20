@@ -73,3 +73,10 @@ body {
     
 }
 
+.lupa{
+    max-height: 2em;
+}
+
+.lupaimg{
+    text-align: center;
+}
