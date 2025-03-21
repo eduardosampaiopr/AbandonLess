@@ -62,6 +62,7 @@
                         <div class="col-md-3">
                             <label for="Tipo de Utilizador" class="form-label">Tipo de Utilizador</label>
                             <select name="tipo" id="tipo" class="form-select">
+                                <option value="Selecionar">Selecione uma opção</option>
                                 <option value="Admnistrador">Admnistrador</option>
                                 <option value="Funcionário">Funcionário</option>
                                 <option value="Data Scientist">Data Scientist</option>
@@ -88,7 +89,14 @@
                             <tr>
                                 <th scope="row">1</th>
                                 <td>Mark</td>
-                                <td>Otto</td>
+                                <td>Admnistrador</td>
+                                <td class="text-center" >
+                                    <a href="#"><img src="../Imagens/icons/lupa.png" class="icon"></td></a>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Rodrigo</td>
+                                <td>Funcionário</td>
                                 <td class="text-center" >
                                     <a href="#"><img src="../Imagens/icons/lupa.png" class="icon"></td></a>
                             </tr>
@@ -110,6 +118,40 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // Definir a opção padrão vazia no select
+    document.getElementById("tipo").value = "";
+
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita o recarregamento da página
+
+        let nomeFiltro = document.getElementById("campo1").value.toLowerCase();
+        let tipoFiltro = document.getElementById("tipo").value.toLowerCase();
+        let linhas = document.querySelectorAll(".table-body tr");
+
+        linhas.forEach(linha => {
+            let nome = linha.cells[1].textContent.toLowerCase();
+            let tipo = linha.cells[2].textContent.toLowerCase();
+            
+            let nomeMatch = nome.includes(nomeFiltro) || nomeFiltro === "";
+            let tipoMatch = tipo.includes(tipoFiltro) || tipoFiltro === "";
+            
+            if (nomeMatch && tipoMatch) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    });
+    document.getElementById("tipo").addEventListener("change", function () {
+        if (this.value === "Selecionar") {
+            this.value = "";
+        }
+    });
+});
+
+    </script>
 
 </body>
 </html>

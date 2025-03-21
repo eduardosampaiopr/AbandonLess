@@ -72,3 +72,11 @@ body {
     overflow-y: auto;
     
 }
+
+.lupaimg{
+    text-align: center;
+}
+
+.lupa{
+    max-height: 2em;
+}

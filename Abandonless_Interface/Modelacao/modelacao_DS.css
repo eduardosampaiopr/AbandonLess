@@ -99,7 +99,7 @@ body {
     white-space: nowrap; /* Evita quebra de linha */
 }
 
-#selecionar{
+.selecionar{
     min-width: 13em;
 }
 

@@ -53,7 +53,7 @@
                 </div>
                 
                 <!--Filtro-->
-                <div class="filtro p-4 ">
+                <div class="filtro p-4 mt-4 mb-2">
                     <form class="row g-3 align-items-end justify-content-center bk-dark">
                         <div class="col-md-3">
                             <label for="Algoritmo" class="form-label">Algoritmo</label>
@@ -78,81 +78,33 @@
                     <table class="table table-bordered mt-4 table-fixed">
                         <thead>
                             <tr class="first">
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Algoritmo</th>
+                                <th scope="col">Criador</th>
+                                <th scope="col">Data de Criação</th>
+                                <th scope="col">Métricas</th>
                             </tr>
                         </thead>
                         <tbody class="table-body">
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                <th scope="row">RegLin</th>
+                                <td>Bacu</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
+                                <th scope="row">RegLin3</th>
+                                <td>David</td>
+                                <td>23-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr><tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
+                                <th scope="row">RegLin4</th>
+                                <td>Bacu</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="/Abandonless_Interface/Imagens/icons/lupa.png"> </a></td>
                             </tr>
+                            
+                            
                            
                         </tbody>
                     </table>
@@ -170,5 +122,40 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita o recarregamento da página
+
+        let nomeFiltro = document.getElementById("campo1").value.toLowerCase();
+        let criadorFiltro = document.getElementById("campo2").value.toLowerCase();
+        let dataFiltro = document.getElementById("campo3").value; // Formato YYYY-MM-DD
+
+        let linhas = document.querySelectorAll("tbody tr");
+
+        linhas.forEach(linha => {
+            let nome = linha.cells[0].textContent.toLowerCase();
+            let criador = linha.cells[1].textContent.toLowerCase();
+            let data = linha.cells[2].textContent.trim(); // Formato DD-MM-YYYY
+
+            // Converter data da linha para YYYY-MM-DD
+            let dataSplit = data.split("-");
+            let dataFormatada = `${dataSplit[2]}-${dataSplit[1]}-${dataSplit[0]}`;
+
+            let nomeMatch = nome.includes(nomeFiltro) || nomeFiltro === "";
+            let criadorMatch = criador.includes(criadorFiltro) || criadorFiltro === "";
+            let dataMatch = dataFiltro === "" || dataFormatada === dataFiltro;
+
+            if (nomeMatch && criadorMatch && dataMatch) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    });
+});
+
+    </script>
 </body>
 </html>

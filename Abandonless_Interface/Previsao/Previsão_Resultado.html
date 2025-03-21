@@ -60,12 +60,12 @@
                     <form class="row g-3 align-items-end justify-content-between bk-dark d-flex">
                         <div class="col-md-3">
                             <label for="Aluno" class="form-label">Aluno</label>
-                            <input type="text" class="form-control" id="campo1" placeholder="Insira o nome do Algoritmo">
+                            <input type="text" class="form-control" id="campo1" placeholder="Insira o nome do Aluno">
                         </div>
                         <div class="col-md-3">
                             <label for="curso" class="form-label">Resultado</label>
                             <select id="curso" class="form-select">
-                                <option selected disabled>Selecione um Resultado</option>
+                                <option value="selecionar resultado">Selecione um Resultado</option>
                                 <option value="Abandono">Abandono</option>
                                 <option value="Permanece">Permanece</option>
                             </select>
@@ -97,7 +97,7 @@
                             <tr>
                                 <th class="text-center" scope="row">2</th>
                                 <td class="text-center">Mark</td>
-                                <td class="text-center status permanencia">Permanência</td>
+                                <td class="text-center status permanencia">Permanece</td>
                             </tr>
         
                             
@@ -127,6 +127,37 @@
             </div>
         </div>
     </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        
+        let alunoFiltro = document.getElementById("campo1").value.toLowerCase();
+        let resultadoFiltro = document.getElementById("curso").value.toLowerCase();
+        
+        let linhas = document.querySelectorAll(".table-body tr");
+        
+        linhas.forEach(linha => {
+            let nomeAluno = linha.children[1].textContent.toLowerCase();
+            let resultado = linha.children[2].textContent.toLowerCase();
+            
+            let matchAluno = alunoFiltro === "" || nomeAluno.includes(alunoFiltro);
+            let matchResultado = resultadoFiltro === "selecionar resultado" || resultado.includes(resultadoFiltro);
+            
+            if (matchAluno && matchResultado) {
+                linha.style.display = "table-row";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    });
+    document.getElementById("curso").addEventListener("change", function () {
+        if (this.value === "selecionar resultado") {
+            this.value = "";
+        }
+    });
+});
 
+</script>
 </body>
 </html>
