@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/Admnistração/user_edit.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <title>AbandonLess</title>
+</head>
+<body>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-auto min-vh-100">
+                <div class="pt-4 pb-1 px-2">
+                    <a href="" class="text-black text-decoration-none">
+                        <img src="{{url_for('static', filename='/Imagens/AbandonLessLogo.png')}}" alt="AbandonLessLogo">
+                    
+                    </a>
+                </div>
+                <hr class="text-white">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="" class="nav-link text-black active">
+                         <span class="d-none d-sm-inline ">Admnistração</span>
+                        </a>
+                    
+                </ul>  
+                <div class="LogOut">
+                    <img class="iconlog" src="{{url_for('static', filename='/Imagens/icons/logout.png')}}">
+                <a href="" class="text-unnderlined text-black">
+                    LogOut
+                </a>  
+                </div>
+            </div>
+
+            <!--Conteudo de Página-->
+            <div class="col p-4 d-flex flex-column min-vh-100 align-items-center" id="main-content">
+                
+                <!--Retângulo Com info do Utilizador-->
+                <div class="d-flex flex-column mt-5 p-4 justify-content-center align-items-center" id="ret_utilizador">
+                    <!--Imagem e Nome de Utilizador-->
+                    <img src="{{url_for('static', filename='/Imagens/icons/profile-user.png')}}" id="user-image">
+                    {% block nome %}
+                    <h3 class="mt-4">{{user.Nome}}</h3>
+                    {% endblock %}
+                
+                
+
+                    <!-- Formulário -->
+                    <form action="{{ url_for('userEdit', user_id=user.ID_utilizador) }}" class="d-flex justify-content-center mt-4" method="POST" id="userForm">
+                        <!-- Lado Esquerdo -->
+                        <div class="d-flex flex-column align-items-end p-5 me-3">
+                            <label for="nome" class="fs-3 fw-bold mb-3">Nome:</label>
+                            <label for="nome_utilizador" class="fs-3 fw-bold mb-3">Nome de Utilizador:</label>
+                            <label for="password" class="fs-3 fw-bold mb-3">Password:</label>
+                            <label for="password_conf" class="fs-3 fw-bold mb-3">Confirmar Password:</label>
+                            <label for="tipoUtilizador" class="fs-3 fw-bold ">Tipo de Utilizador:</label>
+                        </div>
+
+                        <!-- Lado Direito -->
+                        <div class="d-flex flex-column align-items-start p-5 me-5 ms-3">
+                            {% block content %}
+                            <input type="text" id="email" class="input-custom mb-3" value="{{ user.Nome }}" name="Nome">
+                            <input type="text" id="nome" class="input-custom mb-3" value="{{ user.nome_utilizador }}" name="nome_utilizador">
+                            <input type="password" id="password" class="input-custom mb-3" value="{{ user.passw }}" name="passw">
+                            <input type="password" id="password_conf" class="input-custom mb-3" value="{{ user.passw }}" name="passw_conf">
+                            <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom">
+                                <option value="DataScientist" {% if user.Tipo == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
+                                <option value="Funcionário" {% if user.Tipo == 'Funcionário' %}selected{% endif %}>Funcionário</option>
+                                <option value="Administrador" {% if user.Tipo == 'Admnistrador' %}selected{% endif %}>Administrador</option>
+                            </select>
+                            {% endblock %}
+                        </div>
+
+                            <!-- Botões Editar e Voltar -->
+                            <div class="d-flex justify-content-between w-100 mt-5">
+                                <a href="{{ url_for('userDetails', user_id=user.ID_utilizador) }}">
+                                    <button type="button" class="btn btn-secondary px-5" id="btn-back" style="width: 120px;">Voltar</button>
+                                </a>
+
+                
+
+                                <!-- Botão de Salvar Alterações -->
+                                <button type="submit" class="btn btn-primary px-5" id="saveChangesButton" style="width: 120px;">Guardar Alterações</button>
+                            </div>
+
+                    </form>
+
+                        
+                        <script>
+                            document.getElementById('saveChangesButton').addEventListener('click', function(event) {
+                                var password = document.getElementById('password').value;
+                                var passwordConf = document.getElementById('password_conf').value;
+                                var nome_utilizador = document.getElementById('nome_utilizador').value;
+                                var nome = document.getElementById('Nome').value;
+                                var tipoUtilizador = document.getElementById('TiposUtilizadores').value;
+
+                                if(!password || !passwordConf || !nome || !tipoUtilizador || nome_utilizador){
+                                    alert('Por favor, preencha todos os campos.');
+                                    event.preventDefault(); 
+                                    return false;
+                                }
+
+                                if (password !== passwordConf) {
+                                    alert('As senhas não coincidem. Por favor, tente novamente.');
+                                    event.preventDefault(); 
+                                } else {
+                                    // Caso as senhas coincidam, mostra um pop-up de confirmação
+                                    if (confirm('Tem certeza de que deseja guardar as alterações?')) {
+                                        // envia o formulário
+                                        document.getElementById('userForm').submit();
+                                    } else {
+                                        // nada acontece
+                                        event.preventDefault();
+                                    }
+                                }
+                            });
+                        </script>
+
+                        <script>
+                            // Captura o evento de clique no botão
+                            document.getElementById('btn-back').addEventListener('click', function(event) {
+                                // pop-up de confirmação
+                                if (confirm('Tem a certeza que deseja voltar? As alterações não serão guardadas.')) {
+                                    // redireciona para a URL
+                                    window.location.href = "{{url_for('userDetails', user_id=user.ID_utilizador)}}";
+                                } else {
+                                    // nada acontece (a navegação não é realizada)
+                                    event.preventDefault();
+                                }
+                            });
+                        </script>
+
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

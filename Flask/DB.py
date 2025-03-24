@@ -16,11 +16,20 @@ class Utilizador(db.Model):
         self.nome_utilizador = nome_utilizador
         self.passw = passw  
 
+    def __str__(self):
+        return f'{self.Nome} encontrado'
+
 
 def loginDB(user, password):
     db_search = Utilizador.query.filter(
         Utilizador.nome_utilizador == user,
         Utilizador.passw == password  
+    ).first()
+    return db_search
+
+def getUserByID(ID):
+    db_search = Utilizador.query.filter(
+        Utilizador.ID_utilizador == ID
     ).first()
 
     return db_search

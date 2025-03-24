@@ -1,0 +1,105 @@
+.nav-item{
+    background-color: #EBEBEB;
+    margin: 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-size:x-large;
+}
+.nav-link.active {
+    background-color: #C8C5C5 !important; /* Fundo laranja */
+    color: black !important; 
+    border-radius: 10px;
+}
+.nav-item:hover{
+    background-color: #8d8d8d;
+}
+
+.col-auto{
+    background-color: #5299E5;
+    min-width: 25%;
+    align-items: center;
+}
+
+.LogOut {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;  
+    padding-left: 10px; 
+    font-size:larger;
+}
+
+.iconlog{
+    max-height: 1.5em;
+}
+
+body {
+    font-family: 'Montserrat';
+}
+
+.icon-size {
+    max-height: 4em; 
+    width: auto;  
+}
+
+
+.btn{
+    background-color: #5299E5 !important;
+    border-color: #5299E5;
+   
+}
+
+
+#ret_utilizador {
+    max-width: 70em; /* Ajuste este valor conforme necessário */
+    width: 100%;
+    background-color: #D9D9D9; 
+    border-radius: 10px; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Pequena sombra para destaque */
+}
+
+#user-image{
+    max-height: 10em;
+}
+
+
+.btn-primary:hover{
+    border-color: #5299E5;
+}
+
+
+#btn-back{
+    background-color: #C8C5C5 !important;
+    border-color: #C8C5C5; 
+    min-width: 10em;
+}
+
+.input-custom {
+    width: 250px; /* Define um tamanho consistente para os inputs */
+    padding: 2px 0px; /* Ajusta o espaçamento interno */
+    font-size: 1.5rem; /* Mantém o tamanho do texto similar aos <p> anteriores */
+    border: 2px solid black; /* Borda preta */
+    border-radius: 10px; /* Bordas arredondadas */
+    background-color: white; /* Fundo branco */
+    outline: none; /* Remove a borda azul ao focar */
+    
+}
+
+
+.mb-3 {
+    margin-bottom: 15px; /* Espaçamento entre os inputs */
+}
+
+label {
+    width: 250px; /* Define o mesmo tamanho dos inputs para alinhamento */
+    text-align: right; /* Garante alinhamento correto com os inputs */
+    white-space: nowrap;
+    font-family: 'Montserrat';
+}
+
+
+/* Para garantir que as opções dentro do select também usem a mesma fonte */
+select option {
+    font-family: 'Roboto', sans-serif; /* Mesmo que o resto da página */
+}
+
+
