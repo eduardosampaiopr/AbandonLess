@@ -24,14 +24,14 @@
                 <hr class="text-white">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="" class="nav-link text-black active">
+                        <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active">
                          <span class="d-none d-sm-inline ">Admnistração</span>
                         </a>
                     
                 </ul>  
                 <div class="LogOut">
                     <img class="iconlog" src="{{url_for('static', filename='/Imagens/icons/logout.png')}}">
-                <a href="" class="text-unnderlined text-black">
+                <a href="{{ url_for('logout') }}" class="text-unnderlined text-black">
                     LogOut
                 </a>  
                 </div>

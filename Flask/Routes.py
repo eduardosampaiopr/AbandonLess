@@ -21,8 +21,8 @@ def login():
             session["tipo_utilizador"] = user.Tipo
         
     if "user" in session:
-        if session["tipo_utilizador"] == "Admnistrador":
-            return redirect(url_for("adminMain", Username = session["user"]))
+        if session["tipo_utilizador"] == "Administrador":
+            return redirect(url_for("adminMain", username = session["user"]))
         else:
             return redirect(url_for("prevIndex"))
     return render_template("Login.Html")
@@ -35,8 +35,8 @@ def logout():
 
 
 #Módulo de Admnistração
-@app.route("/AdminIndex-<string:Username>")
-def adminMain(Username):
+@app.route("/AdminIndex-<string:username>")
+def adminMain(username):
     if "user" in session:
         allUsers = getUsers()
         return render_template("/Admnistração/tabela_adm.html", users = allUsers, nome = session["user"])
