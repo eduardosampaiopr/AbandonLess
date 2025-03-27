@@ -19,11 +19,10 @@ class Utilizador(db.Model):
         return f'{self.Nome} encontrado'
 
 
-def loginDB(user, password):
+def loginDB(user):
     try:
         db_search = Utilizador.query.filter(
-            Utilizador.nome_utilizador == user,
-            Utilizador.passw == password  
+            Utilizador.nome_utilizador == user, 
         ).first()
         return db_search
     except Exception as e:
@@ -39,7 +38,7 @@ def getUserByID(ID):
     except Exception as e:
         print(f"Erro ao encontrar utilizador por ID: {e}")
         return None
-
+    
 def getUsers():
     try:
         db_search = Utilizador.query.all() 

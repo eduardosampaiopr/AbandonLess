@@ -1,6 +1,6 @@
 from Main import app
 from flask import render_template, session, url_for, redirect, request, flash, jsonify
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from DB import *
 
@@ -13,13 +13,32 @@ def login():
     if request.method == "POST":
         username = request.form["user"]
         password = request.form["password"]
+        print(f'Password: {password}')
 
-        user = loginDB(username, password)
+        user = loginDB(username)
 
         if user:
-            session["user"] = username
-            session["tipo_utilizador"] = user.Tipo
-        
+           
+            if not user.passw.startswith("pbkdf2:sha256"):  
+                # Atualizar a senha na BD para um formato criptografado
+                hashed_password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=16)
+                user.passw = hashed_password
+                try:
+                    db.session.commit()  # SALVANDO no banco corretamente
+                    print(f"Senha do utilizador {username} atualizada para formato seguro.")
+                except Exception as e:
+                    db.session.rollback()
+                    print(f"Erro ao atualizar senha: {e}")
+                    flash("Erro ao atualizar senha. Tente novamente.", "danger")
+                    return redirect(url_for("login"))
+                
+            if check_password_hash(user.passw, password):
+                session["user"] = username
+                session["tipo_utilizador"] = user.Tipo
+    
+    else:
+        flash("Nome de utilizador ou senha inválidos.", "danger")
+            
     if "user" in session:
         if session["tipo_utilizador"] == "Administrador":
             return redirect(url_for("adminMain", username = session["user"]))
@@ -69,18 +88,18 @@ def userEdit(user_id):
                 passw_conf = request.form["passw_conf"]
                 tipo_utilizador = request.form["TiposUtilizadores"]
                 
-                if passw != passw_conf:
-                    flash("As senhas não coincidem. Tente novamente.", "danger")
-                    return redirect(request.url)
+                if passw:
+                    if passw != passw_conf:
+                        flash("As senhas não coincidem. Tente novamente.", "danger")
+                        return redirect(request.url)
+                    user.passw = generate_password_hash(passw, method="pbkdf2:sha256", salt_length=16)
             
                 user.Nome = nome
                 user.nome_utilizador = nome_utilizador
-                user.passw = passw  # Aqui seria uma boa prática criptografar a senha antes de salvar
-                user.Tipo = tipo_utilizador
 
                 db.session.commit()
 
-                flash("Alterações salvas com sucesso.", "success")
+                flash("Alterações guardadas com sucesso.", "success")
                 return redirect(url_for('userDetails', user_id=user.ID_utilizador))
 
             return render_template("/Admnistração/user_edit.html", user = user)
@@ -109,9 +128,11 @@ def userCreate(username):
             if passw != passw_conf:
                 flash("As senhas não coincidem. Tente novamente.", "danger")
                 return redirect(request.url)
+            
+            hashed_password = generate_password_hash(passw, method="pbkdf2:sha256", salt_length=16)
         
             try:
-                createUser(nome, nome_utilizador, passw, tipo_utilizador)
+                createUser(nome, nome_utilizador, hashed_password, tipo_utilizador)
                 print("UTILIZADOR CRIADO COM SUCESSO")
                 return redirect(url_for('adminMain', username = session['user']))
             except Exception as e:

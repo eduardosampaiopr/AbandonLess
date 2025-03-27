@@ -55,7 +55,6 @@
                         <div class="d-flex flex-column align-items-end p-2 me-3">
                             <p class="fs-5 fw-bold">Nome: </p>
                             <p class="fs-5 fw-bold">Nome de Utilizador: </p>
-                            <p class="fs-5 fw-bold">Password: </p>
                             <p class="fs-5 fw-bold">Tipo de Utilizador: </p>
                         </div>
                         <!--Lado Direito-->
@@ -63,7 +62,6 @@
                             {% block content %}
                             <p class="fs-5">{{ user.Nome }}</p>
                             <p class="fs-5">{{user.nome_utilizador}}</p>
-                            <p class="fs-5">{{ '*' * user.passw | length }}</p>
                             <p class="fs-5">{{user.Tipo}}</p>
                             {% endblock %}
                         </div>

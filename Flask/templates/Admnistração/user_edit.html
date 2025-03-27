@@ -57,7 +57,7 @@
                             <div class="d-flex flex-column align-items-end p-2 me-3">
                                 <label for="nome" class="fs-5 fw-bold mb-3">Nome:</label>
                                 <label for="nome_utilizador" class="fs-5 fw-bold mb-3">Nome de Utilizador:</label>
-                                <label for="password" class="fs-5 fw-bold mb-3">Password:</label>
+                                <label for="password" class="fs-5 fw-bold mb-3 me-3">Nova password(Opcional):</label>
                                 <label for="password_conf" class="fs-5 fw-bold mb-3">Confirmar Password:</label>
                                 <label for="tipoUtilizador" class="fs-5 fw-bold ">Tipo de Utilizador:</label>
                             </div>
@@ -66,8 +66,8 @@
                                 {% block content %}
                                 <input type="text" id="email" class="input-custom mb-3" value="{{ user.Nome }}" name="Nome">
                                 <input type="text" id="nome" class="input-custom mb-3" value="{{ user.nome_utilizador }}" name="nome_utilizador">
-                                <input type="password" id="password" class="input-custom mb-3" value="{{ user.passw }}" name="passw">
-                                <input type="password" id="password_conf" class="input-custom mb-3" value="{{ user.passw }}" name="passw_conf">
+                                <input type="password" id="password" class="input-custom mb-3" value="" name="passw" placeholder="Insira uma nova palavra-passe">
+                                <input type="password" id="password_conf" class="input-custom mb-3" value="" name="passw_conf" placeholder="Confirme a nova palavra-passe">
                                 <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom">
                                     <option value="Data Scientist" {% if user.Tipo == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
                                     <option value="Funcionário" {% if user.Tipo == 'Funcionário' %}selected{% endif %}>Funcionário</option>
@@ -99,8 +99,8 @@
                             var tipoUtilizador = document.getElementById('TiposUtilizadores').value;
                     
                             // Verifica se todos os campos obrigatórios foram preenchidos
-                            if(!password || !passwordConf || !nome || !tipoUtilizador || !nome_utilizador){
-                                alert('Por favor, preencha todos os campos.');
+                            if(!nome || !tipoUtilizador || !nome_utilizador){
+                                alert('Por favor, preencha os campos Nome, tipo de Utilizador e Nome_utilizador.');
                                 event.preventDefault(); 
                                 return false;
                             }
