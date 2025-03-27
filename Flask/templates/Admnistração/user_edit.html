@@ -71,7 +71,7 @@
                                 <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom">
                                     <option value="Data Scientist" {% if user.Tipo == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
                                     <option value="Funcionário" {% if user.Tipo == 'Funcionário' %}selected{% endif %}>Funcionário</option>
-                                    <option value="Administrador" {% if user.Tipo == 'Admnistrador' %}selected{% endif %}>Administrador</option>
+                                    <option value="Administrador" {% if user.Tipo == 'Administrador' %}selected{% endif %}>Administrador</option>
                                 </select>
                                 {% endblock %}
                             </div>
@@ -89,7 +89,7 @@
 
                     
 
-                        
+                     <!--Scripts Guardar alterações-->   
                     <script>
                         document.getElementById('saveChangesButton').addEventListener('click', function(event) {
                             var password = document.getElementById('password').value;
@@ -116,7 +116,7 @@
                         });
                     </script>
                     
-
+                    <!--Script Botão voltar-->
                         <script>
                             // Captura o evento de clique no botão
                             document.getElementById('btn-back').addEventListener('click', function(event) {

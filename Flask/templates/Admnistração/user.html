@@ -69,11 +69,12 @@
                         </div>
                     </div>
 
+                    {%block remove%}
                     <!--Botão Eliminar-->
                     <div class="d-flex justify-content-center mt-4">
-                        <button type="submit" class="btn  btn-custom px-5 ">Eliminar Utilizador</button>
+                        <button type="button" class="btn  btn-custom px-5 " onclick="confirmDelete( '{{ user.ID_utilizador}}')">Eliminar Utilizador</button>
                     </div>
-
+                    {%endblock%}
                     <!--Botões Editar e Voltar-->
                     <div class="d-flex justify-content-between w-100 mt-4">
                         <a href="{{url_for('adminMain', username = session['user'])}}">
@@ -91,4 +92,21 @@
     </div>
 
 </body>
+    <!--Script Eliminar-->
+    <script>
+        function confirmDelete(userId) {
+            userId = parseInt(userId);
+            if (confirm("Deseja eliminar este utilizador?")) {
+                fetch(`/removeUser/${userId}`, { method: "POST" })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        if (data.success) {
+                            window.location.href = "{{ url_for('adminMain', username=session['user']) }}";
+                        }
+                    })
+                    .catch(error => console.error("Erro:", error));
+            }
+        }
+    </script>
 </html>

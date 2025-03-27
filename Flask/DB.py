@@ -58,3 +58,19 @@ def createUser(nome, nome_utilizador, passw, tipo_utilizador, ):
     except Exception as e:
         db.session.rollback() 
         print(f"Erro ao criar Utilizador: {e}")
+
+def remUser(ID):
+    try:
+        user = getUserByID(ID)
+        if not user:
+            print(f"Erro: Nenhum usuário encontrado com ID {ID}")
+            return False
+        db.session.delete(user)
+        db.session.commit()
+        print(f"Utilizador {ID} removido com sucesso!")
+        return True
+        
+    except Exception as e:
+        db.session.rollback() 
+        print(f"Erro ao eliminar Utilizador: {e}")
+        return False

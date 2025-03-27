@@ -1,5 +1,5 @@
 from Main import app
-from flask import render_template, session, url_for, redirect, request, flash
+from flask import render_template, session, url_for, redirect, request, flash, jsonify
 
 
 from DB import *
@@ -89,9 +89,6 @@ def userEdit(user_id):
     else:
         return redirect(url_for("login"))
   
-@app.route("/<int:user_id>-<string:Username>remove")
-def userElim(user_id, Username):
-    return ("Removido com sucé")
 
 @app.route("/Admin-<string:username>/NovoUtilizador", methods=['GET', 'POST'])
 def userCreate(username):
@@ -124,6 +121,16 @@ def userCreate(username):
             
     else: 
         return redirect(url_for("login"))
+
+@app.route("/removeUser/<int:user_id>", methods=["POST"])
+def removeUser(user_id):
+    if "user" in session:
+        if remUser(user_id):
+            return jsonify({"success": True, "message": "Utilizador removido com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Utilizador não encontrado."})
+    return jsonify({"success": False, "message": "É preciso estar logado."})
+
 
 #Módulo de Previsão   
 @app.route("/PrevisãoIndex")
