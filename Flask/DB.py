@@ -73,3 +73,14 @@ def remUser(ID):
         db.session.rollback() 
         print(f"Erro ao eliminar Utilizador: {e}")
         return False
+    
+def checkUsernames(username, exclude_user_id=None):
+    try:
+        query = Utilizador.query.filter(Utilizador.nome_utilizador == username)
+        if exclude_user_id:
+              query = query.filter(Utilizador.ID_utilizador != exclude_user_id)
+
+        return query.first()
+    except Exception as e:
+        print(f"Erro ao encontrar utilizador por ID: {e}")
+        return None

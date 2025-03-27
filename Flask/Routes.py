@@ -87,8 +87,15 @@ def userEdit(user_id):
                 passw = request.form["passw"]
                 passw_conf = request.form["passw_conf"]
                 tipo_utilizador = request.form["TiposUtilizadores"]
+
+                if checkUsernames(nome_utilizador, exclude_user_id= user_id):
+                    flash("Este nome de utilizador já está em uso.", "danger")
+                    return redirect(request.url)
                 
                 if passw:
+                    if not passw_conf:
+                        flash("Por favor confirme a password.", "danger")
+                        return redirect(request.url)
                     if passw != passw_conf:
                         flash("As senhas não coincidem. Tente novamente.", "danger")
                         return redirect(request.url)
@@ -96,11 +103,15 @@ def userEdit(user_id):
             
                 user.Nome = nome
                 user.nome_utilizador = nome_utilizador
+                user.Tipo = tipo_utilizador
 
-                db.session.commit()
-
-                flash("Alterações guardadas com sucesso.", "success")
-                return redirect(url_for('userDetails', user_id=user.ID_utilizador))
+                try:
+                    db.session.commit()
+                    flash("Alterações guardadas com sucesso.", "success")
+                    return redirect(url_for('userDetails', user_id=user.ID_utilizador))
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Erro ao guardar alterações: {e}", "danger")
 
             return render_template("/Admnistração/user_edit.html", user = user)
         else:
@@ -124,10 +135,14 @@ def userCreate(username):
             if not nome or not nome_utilizador or not passw or not passw_conf or not tipo_utilizador:
                 flash("Por favor, preencha todos os campos.", "error")
                 return redirect(url_for('userCreate', username = session['user'])) 
+            
+            if checkUsernames(nome_utilizador):
+                    flash("Este nome de utilizador já está em uso.", "danger")
+                    return redirect(request.url)
                 
             if passw != passw_conf:
-                flash("As senhas não coincidem. Tente novamente.", "danger")
-                return redirect(request.url)
+                    flash("As senhas não coincidem. Tente novamente.", "danger")
+                    return redirect(request.url)
             
             hashed_password = generate_password_hash(passw, method="pbkdf2:sha256", salt_length=16)
         
