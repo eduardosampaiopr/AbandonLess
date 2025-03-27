@@ -16,8 +16,9 @@
 
 .col-auto{
     background-color: #5299E5;
-    min-width: 25%;
     align-items: center;
+    min-width: 15%;
+    max-width: 30%;
 }
 
 .LogOut {
@@ -75,8 +76,8 @@ body {
 
 .input-custom {
     width: 250px; /* Define um tamanho consistente para os inputs */
-    padding: 2px 0px; /* Ajusta o espaçamento interno */
-    font-size: 1.5rem; /* Mantém o tamanho do texto similar aos <p> anteriores */
+    padding: 2px 2px; /* Ajusta o espaçamento interno */
+    font-size: 1 rem; /* Mantém o tamanho do texto similar aos <p> anteriores */
     border: 2px solid black; /* Borda preta */
     border-radius: 10px; /* Bordas arredondadas */
     background-color: white; /* Fundo branco */
@@ -102,4 +103,7 @@ select option {
     font-family: 'Roboto', sans-serif; /* Mesmo que o resto da página */
 }
 
+.logo{
+    max-width: 80%;
+}
 

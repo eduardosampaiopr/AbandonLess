@@ -16,7 +16,8 @@
 
 .col-auto{
     background-color: #5299E5;
-    min-width: 25%;
+    min-width: 15%;
+    max-width: 30%;
     align-items: center;
 }
 
@@ -78,11 +79,24 @@ body {
     align-self: center;
 }
 
-#NovoUtilizador{
-    min-height: 50px;
+.NovoUtilizador {
+    position: fixed; /* Tornando o botão fixo */
+    bottom: 20px; /* Distância da parte inferior da tela */
+}
+
+#NovoUtilizador {
+    min-height: 40px;
     font-size: larger;
 }
 
 #NovoUtilizador:hover{
     border-color: #5299E5 ;
+}
+
+.logo{
+    max-width: 80%;
+}
+
+.titulo{
+    font-size: 2.5em ;
 }

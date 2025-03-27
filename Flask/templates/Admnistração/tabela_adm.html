@@ -15,9 +15,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-auto min-vh-100">
-                <div class="pt-4 pb-1 px-2">
+                <div class="pt-4 pb-1 ms-3">
                     <a href="" class="text-black text-decoration-none">
-                        <img src="{{url_for('static',filename = 'Imagens/AbandonLessLogo.png')}}" alt="AbandonLessLogo">
+                        <img src="{{url_for('static',filename = 'Imagens/AbandonLessLogo.png')}}" alt="AbandonLessLogo" class="logo">
                     
                     </a>
                 </div>
@@ -39,12 +39,12 @@
             <div class="col p-4 d-flex flex-column min-vh-100 " id="main-content">
                 <!--div titulo -->
                 <div class="d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 ">Admnistração</h1>
+                    <h1 class="display-1 titulo ">Admnistração</h1>
                     <img src="{{url_for('static', filename= 'Imagens/icons/admin.png')}}" class="img-fluid icon-size ms-3">
                 </div>
                 
                 <!--Filtro-->
-                <div class="filtro p-4 mt-4">
+                <div class="filtro p-2 mt-4">
                     <form class="row g-3 align-items-end justify-content-between bk-dark">
                         <div class="col-md-3">
                             <label for="Nome" class="form-label">Nome</label>
@@ -97,7 +97,7 @@
                
 
                 <!--Botão Nova Previsão-->
-                <div class="d-flex justify-content-center mt-4">
+                <div class="d-flex justify-content-center">
                     <div class="NovoUtilizador">
                         <button type="submit" class="btn btn-primary btn-custom px-5" id="NovoUtilizador">Criar novo Utilizador</button>
                     </div>
