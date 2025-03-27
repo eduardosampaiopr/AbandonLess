@@ -44,7 +44,7 @@ def adminMain(username):
         return redirect(url_for("login"))
 
 
-@app.route("/<int:user_id>Details")
+@app.route("/<int:user_id>Detalhes")
 def userDetails(user_id):
     if "user" in session:
         user = getUserByID(user_id) 
@@ -55,7 +55,7 @@ def userDetails(user_id):
     else:
         return redirect(url_for("login"))
     
-@app.route("/<int:user_id>Edit", methods=['GET', 'POST'])
+@app.route("/<int:user_id>EditarUtilizador", methods=['GET', 'POST'])
 def userEdit(user_id):
     if "user" in session:
         user = getUserByID(user_id) 
@@ -92,6 +92,38 @@ def userEdit(user_id):
 @app.route("/<int:user_id>-<string:Username>remove")
 def userElim(user_id, Username):
     return ("Removido com sucé")
+
+@app.route("/Admin-<string:username>/NovoUtilizador", methods=['GET', 'POST'])
+def userCreate(username):
+
+    if "user" in session:
+
+        if request.method == 'POST':
+            nome = request.form["Nome"]
+            nome_utilizador = request.form["nome_utilizador"]
+            passw = request.form["passw"]
+            passw_conf = request.form["passw_conf"]
+            tipo_utilizador = request.form["TiposUtilizadores"]
+
+            if not nome or not nome_utilizador or not passw or not passw_conf or not tipo_utilizador:
+                flash("Por favor, preencha todos os campos.", "error")
+                return redirect(url_for('userCreate', username = session['user'])) 
+                
+            if passw != passw_conf:
+                flash("As senhas não coincidem. Tente novamente.", "danger")
+                return redirect(request.url)
+        
+            try:
+                createUser(nome, nome_utilizador, passw, tipo_utilizador)
+                print("UTILIZADOR CRIADO COM SUCESSO")
+                return redirect(url_for('adminMain', username = session['user']))
+            except Exception as e:
+                flash(f"Ocorreu um erro ao criar o utilizador: {e}", "danger")
+                return redirect(request.url)
+        return render_template('Admnistração/user_new.html')
+            
+    else: 
+        return redirect(url_for("login"))
 
 #Módulo de Previsão   
 @app.route("/PrevisãoIndex")

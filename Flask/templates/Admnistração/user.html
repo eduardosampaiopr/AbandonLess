@@ -76,7 +76,9 @@
 
                     <!--Botões Editar e Voltar-->
                     <div class="d-flex justify-content-between w-100 mt-4">
-                        <button type="submit" class="btn  px-3" id="btn-back" onclick="window.history.back();">Voltar</button>
+                        <a href="{{url_for('adminMain', username = session['user'])}}">
+                            <button type="submit" class="btn  px-3" id="btn-back" >Voltar</button>
+                        </a>
                         <a href="{{ url_for('userEdit', user_id=user.ID_utilizador) }}">
                             <button type="submit" class="btn btn-primary px-5">Editar Informações</button>
                         </a>

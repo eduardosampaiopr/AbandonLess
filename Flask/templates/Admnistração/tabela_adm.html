@@ -99,7 +99,9 @@
                 <!--Botão Nova Previsão-->
                 <div class="d-flex justify-content-center">
                     <div class="NovoUtilizador">
-                        <button type="submit" class="btn btn-primary btn-custom px-5" id="NovoUtilizador">Criar novo Utilizador</button>
+                        <a href="{{ url_for('userCreate', username=session['user']) }}">
+                            <button type="submit" class="btn btn-primary btn-custom px-5" id="NovoUtilizador">Criar novo Utilizador</button>
+                        </a>
                     </div>
                 </div>
             
