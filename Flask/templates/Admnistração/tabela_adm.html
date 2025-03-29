@@ -25,14 +25,13 @@
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
                         <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active">
-                         <span class="d-none d-sm-inline ">Administração</span>
+                            <span class="d-none d-sm-inline ">Administração</span>
                         </a>
                         <ul class="subitem">
-                            <li>
+                            
                                 <a href="{{ url_for('userCreate', username=session['user']) }}" class="nav-link text-black">
-                                    <span class="NovoUtilizador ms-3">Criar novo Utilizador</span>
+                                    <span class="NovoUtilizador ms-5">Criar novo Utilizador</span>
                                 </a>
-                            </li>
                         </ul>
                     </li>
                     

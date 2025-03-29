@@ -1,17 +1,14 @@
 .nav-item{
-    background-color: #EBEBEB;
+    background-color: #5299E5;
     margin: 20px;
     text-align: center;
     border-radius: 10px;
     font-size:x-large;
 }
 .nav-link.active {
-    background-color: #C8C5C5 !important; /* Fundo laranja */
+    background-color: #C8C5C5 !important; 
     color: black !important; 
     border-radius: 10px;
-}
-.nav-item:hover{
-    background-color: #8d8d8d;
 }
 
 .col-auto{
@@ -107,3 +104,41 @@ select option {
     max-width: 80%;
 }
 
+.subitem .nav-link{
+    background: #5299E5 !important;
+    background-color:#5299E5 !important;
+    color: black;
+}
+
+.subitem:hover{
+    text-decoration: underline;
+}
+
+.subitem .nav-link.active {
+    background-color: #5299E5!important ;
+    background: #5299E5 !important; /* Sem fundo quando ativo */
+    font-weight: bold; /* Destaque quando ativo */
+}
+
+.NovoUtilizador {
+    color: black;
+    text-decoration-color: black;
+    font-size: large; 
+}
+
+.NovoUtilizador::before {
+    content: "•"; /* Ponto antes do texto */
+    color: black; /* Cor do ponto */
+    font-size: larger; /* Tamanho do ponto */
+    margin-right: 5px; /* Espaço entre o ponto e o texto */
+}
+
+.NovoUtilizador.active {
+    font-weight: bold;
+    text-decoration: black;
+
+}
+
+a{
+    color: black;
+}

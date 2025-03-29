@@ -25,10 +25,15 @@
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
                         <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active">
-                         <span class="d-none d-sm-inline ">Admnistração</span>
+                            <span class="d-none d-sm-inline ">Administração</span>
                         </a>
-                    
-                </ul>  
+                        <ul class="subitem">
+                            
+                                <a href="#" class="nav-link text-black">
+                                    <span class="NovoUtilizador ms-5 active">Criar novo Utilizador</span>
+                                </a>
+                        </ul>
+                    </li>  
                 <div class="LogOut">
                     <img class="iconlog" src="{{url_for('static', filename='/Imagens/icons/logout.png')}}">
                 <a href="{{ url_for('logout') }}" class="text-unnderlined text-black">
