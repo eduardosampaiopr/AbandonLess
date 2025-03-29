@@ -107,3 +107,74 @@ select option {
     max-width: 80%;
 }
 
+
+.subitem .nav-link{
+    background: #5299E5 !important;
+    background-color:#5299E5 !important;
+    color: black;
+}
+
+ul .subitem{
+    background-color:#5299E5 !important;
+    background: #5299E5 !important
+
+}
+
+.subitem .nav-link.active {
+    background-color: #5299E5!important ;
+    background: #5299E5 !important; /* Sem fundo quando ativo */
+    font-weight: bold; /* Destaque quando ativo */
+}
+
+.sub {
+    color: black;
+    font-weight: bold;
+    text-decoration-color: black;
+    font-size: large; 
+}
+
+.sub::before {
+    content: "•"; /* Ponto antes do texto */
+    color: black; /* Cor do ponto */
+    font-size: large; /* Tamanho do ponto */
+    margin-right: 0px; /* Ajuste este valor para aproximar o ponto do texto */
+    display: inline-block; /* Garante que o ponto fique na mesma linha */
+}
+
+.sub:hover {
+    text-decoration: underline;
+    text-decoration-color: black;
+
+}
+.sub2 {
+    color: black;
+    text-decoration-color: black;
+    font-size: large; 
+}
+
+.sub2::before {
+    content: "•"; /* Ponto antes do texto */
+    color: black; /* Cor do ponto */
+    font-size: large; /* Tamanho do ponto */
+    margin-right: 0px; /* Ajuste este valor para aproximar o ponto do texto */
+    display: inline-block; /* Garante que o ponto fique na mesma linha */
+}
+
+.sub2::before:hover{
+    color: red;
+}
+
+.sub2:hover {
+    color: red;
+    text-decoration: underline;
+    text-decoration-color: red;
+}
+
+.sub2:hover::before {
+    color: red; /* Cor do ponto ao passar o mouse */
+}
+
+a{
+    color: black;
+}
+
