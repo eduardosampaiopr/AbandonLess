@@ -27,6 +27,13 @@
                         <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active">
                          <span class="d-none d-sm-inline ">Administração</span>
                         </a>
+                        <ul class="subitem">
+                            <li>
+                                <a href="{{ url_for('userCreate', username=session['user']) }}" class="nav-link text-black">
+                                    <span class="NovoUtilizador ms-3">Criar novo Utilizador</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     
                 <div class="LogOut">
@@ -96,14 +103,7 @@
                 
                
 
-                <!--Botão Nova Previsão-->
-                <div class="d-flex justify-content-center">
-                    <div class="NovoUtilizador">
-                        <a href="{{ url_for('userCreate', username=session['user']) }}">
-                            <button type="submit" class="btn btn-primary btn-custom px-5" id="NovoUtilizador">Criar novo Utilizador</button>
-                        </a>
-                    </div>
-                </div>
+               
             
             </div>
         </div>

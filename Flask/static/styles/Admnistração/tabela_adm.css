@@ -1,5 +1,5 @@
 .nav-item{
-    background-color: #EBEBEB;
+    background-color:transparent;
     margin: 20px;
     text-align: center;
     border-radius: 10px;
@@ -9,9 +9,6 @@
     background-color: #C8C5C5 !important; /* Fundo laranja */
     color: black !important; 
     border-radius: 10px;
-}
-.nav-item:hover{
-    background-color: #8d8d8d;
 }
 
 .col-auto{
@@ -79,24 +76,40 @@ body {
     align-self: center;
 }
 
-.NovoUtilizador {
-    position: fixed; /* Tornando o botão fixo */
-    bottom: 20px; /* Distância da parte inferior da tela */
-}
-
-#NovoUtilizador {
-    min-height: 40px;
-    font-size: larger;
-}
-
-#NovoUtilizador:hover{
-    border-color: #5299E5 ;
-}
-
 .logo{
     max-width: 80%;
 }
 
 .titulo{
     font-size: 2.5em ;
+}
+
+
+.subitem .nav-link{
+    background: #5299E5;
+    background-color: #5299E5; 
+    color: black;
+}
+
+.subitem:hover{
+    text-decoration: underline;
+}
+
+.subitem .nav-link.active {
+    background: transparent !important; /* Sem fundo quando ativo */
+    color: #5299E5 !important; /* Cor ativa */
+    font-weight: bold; /* Destaque quando ativo */
+}
+
+.NovoUtilizador {
+    color: black;
+    text-decoration-color: black;
+    font-size: large; 
+}
+
+.NovoUtilizador::before {
+    content: "•"; /* Ponto antes do texto */
+    color: black; /* Cor do ponto */
+    font-size: larger; /* Tamanho do ponto */
+    margin-right: 5px; /* Espaço entre o ponto e o texto */
 }
