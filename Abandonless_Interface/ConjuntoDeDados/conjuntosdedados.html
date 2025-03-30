@@ -16,12 +16,12 @@
         <div class="row">
             <div class="col-auto min-vh-100">
                 <div class="pt-4 pb-1 px-2">
-                    <a href="" class="text-black text-decoration-none">
-                        <img src="../Imagens/AbandonLessLogo.png" alt="AbandonLessLogo">
+                    <a href="" class="text-black text-decoration-none d-flex align-items-center">
+                        <img src="../Imagens/AbandonLessLogo.png" alt="AbandonLessLogo"  class="logo">
                     </a>
                 </div>
                 <hr class="text-white">
-                <ul class="nav nav-pills flex-column mb-auto">
+                <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a href="" class="nav-link text-black ">
                          <span class="d-none d-sm-inline ">Previsão</span>
@@ -35,6 +35,15 @@
                     <li class="nav-item">
                         <a href="" class="nav-link text-black active ">
                          <span class="d-none d-sm-inline">Conjuntos de Dados</span></a>
+
+                         <ul class="nav flex-column ms-3" style="gap: 4px; padding-top: 4px;">
+                            <li >
+                                <a href="" class="text-black" style="text-decoration: none; font-size: 0.9rem; " onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                                    <span>Adicionar novo conjunto</span>
+                                </a>
+                            </li>
+                        </ul>
+
                     </li>
                 </ul>  
                 <div class="LogOut">
@@ -51,7 +60,7 @@
 
                 <!--div titulo -->
                 <div class="d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 ">Conjunto de Dados</h1>
+                    <h1 class="display-1 titulo">Conjunto de Dados</h1>
                     <img src="../Imagens/icons/modelacao.png" class="img-fluid icon-size ms-3">
                 </div>
 
@@ -127,20 +136,6 @@
                 
 
                     </div>
-                </div>
-                
-
-                
-            
-                <!--Área Botões-->
-                <div class="d-flex justify-content-center mt-5">
-
-                     
-                    <!--Botão Novo Conjunto de Dados-->
-                    <div >
-                        <button type="submit" class="btn btn-primary btn-custom ">Novo Conjunto de Dados</button>
-                    </div>
-
                 </div>
             
             </div>
