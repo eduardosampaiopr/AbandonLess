@@ -78,28 +78,35 @@
                         <div class="d-flex justify-content-center">
                             <!-- Lado Esquerdo -->
                             <div class="d-flex flex-column align-items-end p-2 me-3">
-                                <label for="nome" class="fs-5 fw-bold mb-3">Nome:</label>
+                                <label for="nome" class="fs-5 fw-bold mb-3">Nome Completo:</label>
                                 <label for="nome_utilizador" class="fs-5 fw-bold mb-3">Nome de Utilizador:</label>
-                                <label for="password" class="fs-5 fw-bold mb-3 me-3">Nova password(Opcional):</label>
+                                <label for="email" class="fs-5 fw-bold mb-3">Email:</label>
+                                <label for="tipoUtilizador" class="fs-5 fw-bold mb-3">Tipo de Utilizador:</label>
+                                <label for="password" class="fs-5 fw-bold mb-3 me-3">Nova password(Opcional*):</label>
                                 <label for="password_conf" class="fs-5 fw-bold mb-3">Confirmar Password:</label>
-                                <label for="tipoUtilizador" class="fs-5 fw-bold ">Tipo de Utilizador:</label>
                             </div>
                             <!-- Lado Direito -->
                             <div class="d-flex flex-column align-items-start p-2 me-3 ms-3">
                                 {% block content %}
-                                <input type="text" id="email" class="input-custom mb-3" value="{{ user.Nome }}" name="Nome">
-                                <input type="text" id="nome" class="input-custom mb-3" value="{{ user.nome_utilizador }}" name="nome_utilizador">
+                                <input type="text" id="nome" class="input-custom mb-3" value="{{ user.nome }}" name="Nome">
+                                <input type="text" id="username" class="input-custom mb-3" value="{{ user.username }}" name="nome_utilizador">
+                                <input type="text" id="email" class="input-custom mb-3" value="{{ user.email }}" name="email">
+                                <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom mb-3">
+                                    <option value="Data Scientist" {% if user.tipo_utilizador == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
+                                    <option value="Funcionário" {% if user.tipo_utilizador == 'Funcionário' %}selected{% endif %}>Funcionário</option>
+                                    <option value="Administrador" {% if user.tipo_utilizador == 'Administrador' %}selected{% endif %}>Administrador</option>
+                                </select>
                                 <input type="password" id="password" class="input-custom mb-3" value="" name="passw" placeholder="Insira uma nova palavra-passe">
                                 <input type="password" id="password_conf" class="input-custom mb-3" value="" name="passw_conf" placeholder="Confirme a nova palavra-passe">
-                                <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom">
-                                    <option value="Data Scientist" {% if user.tipo_utilizador == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
-                                    <option value="Funcionário" {% if user.tipo_utilizado == 'Funcionário' %}selected{% endif %}>Funcionário</option>
-                                    <option value="Administrador" {% if user.tipo_utilizado == 'Administrador' %}selected{% endif %}>Administrador</option>
-                                </select>
                                 {% endblock %}
                             </div>
-
                         </div>
+
+                        <!--Aviso-->
+                        <div class="d-flex align-items-center mt-2">
+                            <span >* Só é necessário preenhcer este campo caso deseje alterar a password do utilizador</span>
+                        </div>
+
                         <!-- Botões Editar e Voltar -->
                         <div class="d-flex justify-content-between w-100 mt-5">
                             <a href="{{ url_for('userDetails', user_id=user.id) }}">

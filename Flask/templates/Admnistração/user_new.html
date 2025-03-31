@@ -74,21 +74,23 @@
                             <div class="d-flex flex-column align-items-end p-2 me-3">
                                 <label for="nome" class="fs-5 fw-bold mb-3">Nome:</label>
                                 <label for="nome_utilizador" class="fs-5 fw-bold mb-3">Nome de Utilizador:</label>
+                                <label for="email" class="fs-5 fw-bold mb-3">Email:</label>
+                                <label for="tipoUtilizador" class="fs-5 fw-bold mb-3">Tipo de Utilizador:</label>
                                 <label for="password" class="fs-5 fw-bold mb-3">Password:</label>
                                 <label for="password_conf" class="fs-5 fw-bold mb-3">Confirmar Password:</label>
-                                <label for="tipoUtilizador" class="fs-5 fw-bold ">Tipo de Utilizador:</label>
                             </div>
                             <!-- Lado Direito -->
                             <div class="d-flex flex-column align-items-start p-2 me-3 ms-3">
                                 <input type="text" id="nome" class="input-custom mb-3" value="" name="Nome" placeholder="Insira o nome do Utilizador">
                                 <input type="text" id="nome_utilizador" class="input-custom mb-3" value="" name="nome_utilizador" placeholder="Insira o novo nome de Utilizador">
-                                <input type="password" id="password" class="input-custom mb-3" value="" name="passw" placeholder="Insira uma password">
-                                <input type="password" id="password_conf" class="input-custom mb-3" value="" name="passw_conf" placeholder="Confirme a password">
-                                <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom">
+                                <input type="text" id="email" class="input-custom mb-3" value="user.email" name="email">
+                                <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom mb-3">
                                     <option value="Data Scientist" >Data Scientist</option>
                                     <option value="Funcionário" >Funcionário</option>
                                     <option value="Administrador" >Administrador</option>
                                 </select>
+                                <input type="password" id="password" class="input-custom mb-3" value="" name="passw" placeholder="Insira uma password">
+                                <input type="password" id="password_conf" class="input-custom mb-3" value="" name="passw_conf" placeholder="Confirme a password">
                             </div>
 
                         </div>

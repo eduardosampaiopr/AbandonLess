@@ -47,8 +47,23 @@
                 </div>
             </div>
 
+            
+
             <!--Conteudo de Página-->
             <div class="col p-2 d-flex flex-column min-vh-100 align-items-center" id="main-content">
+                <!--Mensagens Flash-->
+                <div class="container mt-3">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            {% for category, msg in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ msg }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
                 <!--Retângulo Com info do Utilizador-->
                 <div class="d-flex flex-column mt-1 p-2 justify-content-center align-items-center" id="ret_utilizador">
                     <!--Imagem e Nome de Utilizador-->
@@ -62,8 +77,9 @@
                     <div class="d-flex justify-content-center  mt-2">
                         <!--Lado Esquerdo-->
                         <div class="d-flex flex-column align-items-end p-2 me-3">
-                            <p class="fs-5 fw-bold">Nome: </p>
+                            <p class="fs-5 fw-bold">Nome Completo: </p>
                             <p class="fs-5 fw-bold">Nome de Utilizador: </p>
+                            <p class="fs-5 fw-bold">Email: </p>
                             <p class="fs-5 fw-bold">Tipo de Utilizador: </p>
                         </div>
                         <!--Lado Direito-->
@@ -71,6 +87,7 @@
                             {% block content %}
                             <p class="fs-5">{{ user.nome }}</p>
                             <p class="fs-5">{{user.username}}</p>
+                            <p class="fs-5">{{user.email}}</p>
                             <p class="fs-5">{{user.tipo_utilizador}}</p>
                             {% endblock %}
                         </div>

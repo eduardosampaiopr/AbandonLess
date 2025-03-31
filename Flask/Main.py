@@ -20,7 +20,6 @@ db = SQLAlchemy(app)
 
 with app.app_context():
     db.create_all()
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
 
 from Routes import *
 
