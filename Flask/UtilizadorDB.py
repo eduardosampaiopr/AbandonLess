@@ -1,28 +1,35 @@
 from Main import db
+import datetime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, LargeBinary, JSON
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-class Utilizador(db.Model):  
-    __tablename__ = "utilizadores"
 
-    ID_utilizador = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    Nome = db.Column(db.String(60), nullable=False)
-    Tipo = db.Column(db.String(30), nullable=False)
-    nome_utilizador = db.Column(db.String(30), unique=True, nullable=False)
-    passw = db.Column(db.String(200), nullable=False)  
+class Utilizador(db.Model):
+    __tablename__ = 'utilizador'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nome = Column(String(255), nullable=False)
+    email = Column(String(255), nullable=False, unique=True)
+    password = Column(String(255), nullable=False)
+    tipo_utilizador = Column(String(50))
+    username = Column(String(255), nullable=False, unique=True)
+    data_criacao = Column(DateTime, default=datetime.datetime.utcnow)
+    data_atualizacao = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
-    def __init__(self, Nome, Tipo, nome_utilizador, passw):
-        self.Nome = Nome
-        self.Tipo = Tipo
-        self.nome_utilizador = nome_utilizador
-        self.passw = passw  
 
-    def __str__(self):
-        return f'{self.Nome} encontrado'
+    def __init__(self, nome, email, password, tipo_utilizador, username):
+        self.nome = nome
+        self.email = email
+        self.password = password
+        self.tipo_utilizador = tipo_utilizador
+        self.username = username
 
 
 def loginDB(user):
     try:
         db_search = Utilizador.query.filter(
-            Utilizador.nome_utilizador == user, 
+            Utilizador.username == user, 
         ).first()
         return db_search
     except Exception as e:
@@ -32,7 +39,7 @@ def loginDB(user):
 def getUserByID(ID):
     try:
         db_search = Utilizador.query.filter(
-            Utilizador.ID_utilizador == ID
+            Utilizador.id == ID
         ).first()
         return db_search
     except Exception as e:
@@ -48,9 +55,9 @@ def getUsers():
         print(f"Erro ao encontrar utilizador: {e}")
         return None
 
-def createUser(nome, nome_utilizador, passw, tipo_utilizador, ):
+def createUser(nome, email, username, password, tipo_utilizador, ):
     try:
-        new_user = Utilizador(nome, tipo_utilizador, nome_utilizador, passw)
+        new_user = Utilizador(nome, email, password, tipo_utilizador, username)
         db.session.add(new_user)
         db.session.commit()  # Corrigido o commit
         print(f"Usuário {new_user.Nome} criado com sucesso!")
@@ -76,9 +83,9 @@ def remUser(ID):
     
 def checkUsernames(username, exclude_user_id=None):
     try:
-        query = Utilizador.query.filter(Utilizador.nome_utilizador == username)
+        query = Utilizador.query.filter(Utilizador.username == username)
         if exclude_user_id:
-              query = query.filter(Utilizador.ID_utilizador != exclude_user_id)
+              query = query.filter(Utilizador.id != exclude_user_id)
 
         return query.first()
     except Exception as e:

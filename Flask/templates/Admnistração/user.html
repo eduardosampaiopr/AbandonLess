@@ -29,11 +29,11 @@
                         </a>
                         <ul class="subitem d-flex flex-column ">
                             
-                            <a href="{{ url_for('userEdit', user_id=user.ID_utilizador) }}" class="nav-link text-black sub">
+                            <a href="{{ url_for('userEdit', user_id=user.id) }}" class="nav-link text-black sub">
                                 <span class="d-none d-sm-inline">Editar Utilizador</span>
                             </a>
                             
-                            <a href="#" class="nav-link sub2" onclick="confirmDelete('{{ user.ID_utilizador}}')">
+                            <a href="#" class="nav-link sub2" onclick="confirmDelete('{{ user.id}}')">
                                 <span class="d-none d-sm-inline">Eliminar Utilizador</span>
                             </a>
                         </ul>
@@ -69,9 +69,9 @@
                         <!--Lado Direito-->
                         <div class="d-flex flex-column align-items-start p-2 me-3">
                             {% block content %}
-                            <p class="fs-5">{{ user.Nome }}</p>
-                            <p class="fs-5">{{user.nome_utilizador}}</p>
-                            <p class="fs-5">{{user.Tipo}}</p>
+                            <p class="fs-5">{{ user.nome }}</p>
+                            <p class="fs-5">{{user.username}}</p>
+                            <p class="fs-5">{{user.tipo_utilizador}}</p>
                             {% endblock %}
                         </div>
                     </div>

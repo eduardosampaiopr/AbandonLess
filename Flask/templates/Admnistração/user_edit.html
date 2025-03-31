@@ -29,11 +29,11 @@
                         </a>
                         <ul class="subitem d-flex flex-column ">
                             
-                            <a href="{{ url_for('userEdit', user_id=user.ID_utilizador) }}" class="nav-link text-black sub">
+                            <a href="{{ url_for('userEdit', user_id=user.id) }}" class="nav-link text-black sub">
                                 <span class="d-none d-sm-inline">Editar Utilizador</span>
                             </a>
                             
-                            <a href="#" class="nav-link sub2" onclick="confirmDelete('{{ user.ID_utilizador}}')">
+                            <a href="#" class="nav-link sub2" onclick="confirmDelete('{{ user.id}}')">
                                 <span class="d-none d-sm-inline">Eliminar Utilizador</span>
                             </a>
                         </ul>
@@ -74,7 +74,7 @@
                 
 
                     <!-- Formulário -->
-                    <form action="{{ url_for('userEdit', user_id=user.ID_utilizador) }}" class="mt-2" method="POST" id="userForm">
+                    <form action="{{ url_for('userEdit', user_id=user.id) }}" class="mt-2" method="POST" id="userForm">
                         <div class="d-flex justify-content-center">
                             <!-- Lado Esquerdo -->
                             <div class="d-flex flex-column align-items-end p-2 me-3">
@@ -92,9 +92,9 @@
                                 <input type="password" id="password" class="input-custom mb-3" value="" name="passw" placeholder="Insira uma nova palavra-passe">
                                 <input type="password" id="password_conf" class="input-custom mb-3" value="" name="passw_conf" placeholder="Confirme a nova palavra-passe">
                                 <select id="tipoUtilizador" name="TiposUtilizadores" class="input-custom">
-                                    <option value="Data Scientist" {% if user.Tipo == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
-                                    <option value="Funcionário" {% if user.Tipo == 'Funcionário' %}selected{% endif %}>Funcionário</option>
-                                    <option value="Administrador" {% if user.Tipo == 'Administrador' %}selected{% endif %}>Administrador</option>
+                                    <option value="Data Scientist" {% if user.tipo_utilizador == 'DataScientist' %}selected{% endif %}>Data Scientist</option>
+                                    <option value="Funcionário" {% if user.tipo_utilizado == 'Funcionário' %}selected{% endif %}>Funcionário</option>
+                                    <option value="Administrador" {% if user.tipo_utilizado == 'Administrador' %}selected{% endif %}>Administrador</option>
                                 </select>
                                 {% endblock %}
                             </div>
@@ -102,7 +102,7 @@
                         </div>
                         <!-- Botões Editar e Voltar -->
                         <div class="d-flex justify-content-between w-100 mt-5">
-                            <a href="{{ url_for('userDetails', user_id=user.ID_utilizador) }}">
+                            <a href="{{ url_for('userDetails', user_id=user.id) }}">
                                 <button type="button" class="btn btn-secondary px-5" id="btn-back" style="width: 120px;">Voltar</button>
                             </a>
                             <!-- Botão de Salvar Alterações -->
@@ -146,7 +146,7 @@
                                 // pop-up de confirmação
                                 if (confirm('Tem a certeza que deseja voltar? As alterações não serão guardadas.')) {
                                     // redireciona para a URL
-                                    window.location.href = "{{url_for('userDetails', user_id=user.ID_utilizador)}}";
+                                    window.location.href = "{{url_for('userDetails', user_id=user.id)}}";
                                 } else {
                                     // nada acontece (a navegação não é realizada)
                                     event.preventDefault();

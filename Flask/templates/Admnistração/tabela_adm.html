@@ -85,11 +85,11 @@
                         <tbody class="table-body">
                             {%for user in users%}
                             <tr>
-                                <th scope="row">{{user.ID_utilizador}}</th>
-                                <td>{{user.Nome}}</td>
-                                <td>{{user.Tipo}}</td>
+                                <th scope="row">{{user.id}}</th>
+                                <td>{{user.nome}}</td>
+                                <td>{{user.tipo_utilizador}}</td>
                                 <td class="text-center" >
-                                    <a href="{{ url_for('userDetails', user_id=user.ID_utilizador)}}">
+                                    <a href="{{ url_for('userDetails', user_id=user.id)}}">
                                         <img src="{{url_for('static', filename='/Imagens/icons/lupa.png')}}" class="icon">
                                     </a>
                                 </td>

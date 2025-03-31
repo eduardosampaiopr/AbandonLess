@@ -2,7 +2,7 @@ from Main import app
 from flask import render_template, session, url_for, redirect, request, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from DB import *
+from UtilizadorDB import *
 
 
 
@@ -13,16 +13,15 @@ def login():
     if request.method == "POST":
         username = request.form["user"]
         password = request.form["password"]
-        print(f'Password: {password}')
 
         user = loginDB(username)
 
         if user:
            
-            if not user.passw.startswith("pbkdf2:sha256"):  
+            if not user.password.startswith("pbkdf2:sha256"):  
                 # Atualizar a senha na BD para um formato criptografado
                 hashed_password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=16)
-                user.passw = hashed_password
+                user.password = hashed_password
                 try:
                     db.session.commit()  # SALVANDO no banco corretamente
                     print(f"Senha do utilizador {username} atualizada para formato seguro.")
@@ -32,9 +31,9 @@ def login():
                     flash("Erro ao atualizar senha. Tente novamente.", "danger")
                     return redirect(url_for("login"))
                 
-            if check_password_hash(user.passw, password):
+            if check_password_hash(user.password, password):
                 session["user"] = username
-                session["tipo_utilizador"] = user.Tipo
+                session["tipo_utilizador"] = user.tipo_utilizador
     
     else:
         flash("Nome de utilizador ou senha inválidos.", "danger")
@@ -99,16 +98,17 @@ def userEdit(user_id):
                     if passw != passw_conf:
                         flash("As senhas não coincidem. Tente novamente.", "danger")
                         return redirect(request.url)
-                    user.passw = generate_password_hash(passw, method="pbkdf2:sha256", salt_length=16)
+                    user.password = generate_password_hash(passw, method="pbkdf2:sha256", salt_length=16)
             
-                user.Nome = nome
-                user.nome_utilizador = nome_utilizador
-                user.Tipo = tipo_utilizador
+                user.nome = nome
+                user.username = nome_utilizador
+                user.tipo_utilizador = tipo_utilizador
+                user.email = 'emailprov@gmail.com'
 
                 try:
                     db.session.commit()
                     flash("Alterações guardadas com sucesso.", "success")
-                    return redirect(url_for('userDetails', user_id=user.ID_utilizador))
+                    return redirect(url_for('userDetails', user_id=user.id))
                 except Exception as e:
                     db.session.rollback()
                     flash(f"Erro ao guardar alterações: {e}", "danger")
@@ -147,7 +147,7 @@ def userCreate(username):
             hashed_password = generate_password_hash(passw, method="pbkdf2:sha256", salt_length=16)
         
             try:
-                createUser(nome, nome_utilizador, hashed_password, tipo_utilizador)
+                createUser(nome,'emailprov@gmail.com', nome_utilizador, hashed_password, tipo_utilizador)
                 print("UTILIZADOR CRIADO COM SUCESSO")
                 return redirect(url_for('adminMain', username = session['user']))
             except Exception as e:
