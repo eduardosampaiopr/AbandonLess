@@ -1,10 +1,11 @@
 from Main import app
 from flask import render_template, session, url_for, redirect, request, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 from UtilizadorDB import *
 
-
+app.config["UPLOAD_FOLDER"] = "uploads"
 
 @app.route("/", methods=["POST", "GET"])
 def login():
@@ -42,7 +43,7 @@ def login():
         if session["tipo_utilizador"] == "Administrador":
             return redirect(url_for("adminMain", username = session["user"]))
         else:
-            return redirect(url_for("prevIndex"))
+            return redirect(url_for("ConjIndex"))
     return render_template("Login.Html")
 
 @app.route("/logout")
@@ -159,7 +160,7 @@ def userCreate(username):
     else: 
         return redirect(url_for("login"))
 
-@app.route("/removeUser/<int:user_id>", methods=["POST"])
+@app.route("/removerUtilizador/<int:user_id>", methods=["POST"])
 def removeUser(user_id):
     if "user" in session:
         if remUser(user_id):
@@ -169,9 +170,39 @@ def removeUser(user_id):
     return jsonify({"success": False, "message": "É preciso estar logado."})
 
 
-#Módulo de Previsão   
-@app.route("/PrevisãoIndex")
-def prevIndex():
-    return render_template("/Previsao/Index.html")
+#Módulo de Conjunto De Dados  
+@app.route("/ConjuntosDeDados")
+def ConjIndex():
+    if "user" in session:
+        return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
+    else: 
+        return redirect(url_for("login"))
+    
+@app.route("/ConjuntosDeDados/NovoConjunto", methods=["POST", "GET"])
+def NovoDataset():
+    if "user" in session:
+
+        if request.method == "POST":
+           
+            if "file" not in request.files:
+                flash("Nenhum Ficheiro Submetido.", "error")
+                return redirect(request.url)
+
+            upload_file = request.files["file"]
+
+            
+            if upload_file.filename == "":
+                flash("Ficherio sem nome.", "error")
+                return redirect(request.url)
+
+            
+            if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+                os.makedirs(app.config["UPLOAD_FOLDER"])
+
+            file_path = os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename)
+            upload_file.save(file_path)
+        return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
+    else: 
+        return redirect(url_for("login"))
 
 
