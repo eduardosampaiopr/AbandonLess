@@ -4,6 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 from UtilizadorDB import *
+from DataSetDB import *
+from ModeloDB import *
+from PrevisãoDB import *
 
 app.config["UPLOAD_FOLDER"] = "uploads"
 
@@ -45,6 +48,7 @@ def login():
         else:
             return redirect(url_for("ConjIndex"))
     return render_template("Login.Html")
+
 
 @app.route("/logout")
 def logout():
