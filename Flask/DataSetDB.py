@@ -22,17 +22,8 @@ class Dataset(db.Model):
     modelos = relationship('ModeloPreditivo', back_populates='dataset_criacao')
     previsoes = relationship('Previsao', back_populates='dataset_execucao')
 
-def createDataset(path, utilizador_ID, nome , caminho):
-    # COUNT de registos
-    try:
-        with open(path, 'r', encoding='utf-8') as f:  # Abre o ficheiro guardado
-            reader = csv.reader(f)
-            num_reg = len(list(reader))
-            f.seek(0)
-    except Exception as e:
-        print(f"Erro ao ler o ficheiro CSV: {e}")
-        return False
-    
+def createDataset(num_reg, utilizador_ID, nome , caminho):
+
     try:
         new_dataSet = Dataset(
             nome=nome,

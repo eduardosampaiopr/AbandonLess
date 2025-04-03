@@ -15,6 +15,18 @@
             <!-- Sidebar -->
             {% include 'sidebar.html' %}
             <div class="col p-4 d-flex flex-column min-vh-100" id="main-content">
+                <div class="container mt-3">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            {% for category, msg in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ msg }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
                 <div class="d-flex align-items-center justify-content-center">
                     <h1 class="display-1 titulo">Upload de Conjunto de Dados</h1>
                     <img src="{{url_for('static', filename='/Imagens/Icons/upload.png')}}" class="img-fluid icon-size ms-3">
