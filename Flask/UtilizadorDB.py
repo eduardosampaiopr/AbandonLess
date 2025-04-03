@@ -17,6 +17,10 @@ class Utilizador(db.Model):
     data_criacao = Column(DateTime, default=datetime.datetime.utcnow)
     data_atualizacao = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
+    
+    datasets = relationship('Dataset', back_populates='utilizador')
+    modelos = relationship('ModeloPreditivo', back_populates='utilizador')
+    previsoes = relationship('Previsao', back_populates='utilizador')
 
     def __init__(self, nome, email, password, tipo_utilizador, username):
         self.nome = nome
@@ -60,7 +64,7 @@ def createUser(nome, email, username, password, tipo_utilizador, ):
         new_user = Utilizador(nome, email, password, tipo_utilizador, username)
         db.session.add(new_user)
         db.session.commit()  # Corrigido o commit
-        print(f"Usuário {new_user.Nome} criado com sucesso!")
+        print(f"{new_user.Nome} criado com sucesso!")
     except Exception as e:
         db.session.rollback() 
         print(f"Erro ao criar Utilizador: {e}")
@@ -69,7 +73,7 @@ def remUser(ID):
     try:
         user = getUserByID(ID)
         if not user:
-            print(f"Erro: Nenhum usuário encontrado com ID {ID}")
+            print(f"Erro: Nenhum utilizador encontrado com ID {ID}")
             return False
         db.session.delete(user)
         db.session.commit()

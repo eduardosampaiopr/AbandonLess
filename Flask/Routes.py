@@ -38,6 +38,7 @@ def login():
             if check_password_hash(user.password, password):
                 session["user"] = username
                 session["tipo_utilizador"] = user.tipo_utilizador
+                session["id"] = user.id
     
     else:
         flash("Nome de utilizador ou senha inválidos.", "danger")
@@ -181,30 +182,31 @@ def ConjIndex():
         return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
     else: 
         return redirect(url_for("login"))
-    
+
+
 @app.route("/ConjuntosDeDados/NovoConjunto", methods=["POST", "GET"])
 def NovoDataset():
     if "user" in session:
-
         if request.method == "POST":
-           
             if "file" not in request.files:
                 flash("Nenhum Ficheiro Submetido.", "error")
                 return redirect(request.url)
 
             upload_file = request.files["file"]
 
-            
             if upload_file.filename == "":
                 flash("Ficherio sem nome.", "error")
                 return redirect(request.url)
-
             
             if not os.path.exists(app.config["UPLOAD_FOLDER"]):
                 os.makedirs(app.config["UPLOAD_FOLDER"])
 
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename)
             upload_file.save(file_path)
+
+            createDataset(file_path, session["id"], upload_file.filename, os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename))
+                
+
         return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
     else: 
         return redirect(url_for("login"))
