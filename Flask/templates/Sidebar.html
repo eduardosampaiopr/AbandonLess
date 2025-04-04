@@ -18,7 +18,7 @@
         <ul class="nav nav-pills flex-column">
             <li class="nav-item">
                 <a href="#" class="nav-link text-black">
-                    <span class="d-none d-sm-inline">Previsão</span>
+                    <span class="d-none d-sm-inline main">Previsão</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="previsao-menu">
                     <li>
@@ -33,7 +33,7 @@
             {% if session["tipo_utilizador"] == "Data Scientist" %}
             <li class="nav-item">
                 <a href="#" class="nav-link text-black">
-                    <span class="d-none d-sm-inline">Modelação</span>
+                    <span class="d-none d-sm-inline main">Modelação</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" id="modelacao-menu">
                     <li>
@@ -45,8 +45,8 @@
             </li>
             {% endif %}
             <li class="nav-item">
-                <a href="#" class="nav-link text-black active">
-                    <span class="d-none d-sm-inline">Conjuntos de Dados</span>
+                <a href="{{url_for('ConjIndex')}}" class="nav-link text-black active">
+                    <span class="d-none d-sm-inline main">Conjuntos de Dados</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="conjuntos-menu">
                     <li>
@@ -55,6 +55,16 @@
                            onmouseout="this.style.textDecoration='none'">
                             <span>Adicionar novo conjunto</span>
                         </a>
+                    </li>
+                </ul>
+                <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="conjuntos-menu2">
+                    <li>
+                        <a href="{{ url_for('NovoDataset') }}" 
+                        class=" submenu-item link-eliminar" 
+                        style="font-size: 0.9rem;">
+                        <span>Eliminar Conjunto de Dados</span>
+                     </a>
+                     
                     </li>
                 </ul>
             </li>
@@ -78,6 +88,8 @@
                 document.getElementById("modelacao-menu").style.display = "block";
             } else if (currentPage === "ConjuntosDeDados") { 
                 document.getElementById("conjuntos-menu").style.display = "block";
+            } else if (currentPage === "ConjuntosDeDados2") { 
+                document.getElementById("conjuntos-menu2").style.display = "block";
             }
         });
         </script>

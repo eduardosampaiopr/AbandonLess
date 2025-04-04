@@ -256,7 +256,7 @@ def verDataset(dataset_id):
                                     header=header,
                                     dados=df.values,
                                     page=page,
-                                    total_pages=total_pages, current_page="ConjuntosDeDados")
+                                    total_pages=total_pages, current_page="ConjuntosDeDados2")
             except Exception as e:
                 try:
                     df = pd.read_csv(dataset.caminho, delimiter= ',', skiprows=range(1, start_row + 1),
@@ -271,7 +271,7 @@ def verDataset(dataset_id):
                                     header=header,
                                     dados=df.values,
                                     page=page,
-                                    total_pages=total_pages, current_page="ConjuntosDeDados")
+                                    total_pages=total_pages, current_page="ConjuntosDeDados2")
                 except Exception as e:
                     print(f"Erro ao ler o ficheiro: {e}", "error")
                     return redirect(request.url)
