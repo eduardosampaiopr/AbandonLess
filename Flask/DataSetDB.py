@@ -48,3 +48,13 @@ def getDatasets(user_id):
         db.session.rollback()  # Corrigido o rollback
         print(f"Erro ao encontrar Datasets: {e}")
         return None
+    
+def getDatasetByID(id):
+    try:
+        db_search = Dataset.query.filter(
+            Dataset.id == id
+        ).first()
+        return db_search
+    except Exception as e:
+        print(f"Erro ao encontrar dataset por ID: {e}")
+        return None

@@ -47,7 +47,7 @@
                                             <td>{{d.num_registos}}</td>
                                             <td>{{d.data_upload}}</td>
                                             <td class="text-center" >
-                                                <a href="{{ url_for('NovoDataset')}}">
+                                                <a href="{{ url_for('verDataset',  dataset_id=d.id)}}">
                                                     <img src="{{url_for('static', filename='/Imagens/icons/lupa.png')}}" class="icon">
                                                 </a>
                                             </td>

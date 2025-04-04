@@ -1,7 +1,7 @@
 from Main import app
 from flask import render_template, session, url_for, redirect, request, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
+import os, pandas as pd
 
 from UtilizadorDB import *
 from DataSetDB import *
@@ -234,4 +234,50 @@ def NovoDataset():
     else: 
         return redirect(url_for("login"))
 
+@app.route("/ConjuntosDeDados/<int:dataset_id>")
+def verDataset(dataset_id):
+    if "user" in session:
+        dataset = getDatasetByID(dataset_id)
+        if dataset:
+            page = int(request.args.get("page", 1))
+            per_page = 50  
+            start_row = (page - 1) * per_page
+
+            try:
+                df = pd.read_csv(dataset.caminho, delimiter= ';', skiprows=range(1, start_row + 1), nrows=per_page,
+                                  encoding='utf-8', on_bad_lines='skip')
+                header = pd.read_csv(dataset.caminho, delimiter= ';', nrows=0, encoding='utf-8').columns.tolist()
+
+                total_rows = sum(1 for _ in open(dataset.caminho)) - 1  # -1 para excluir o cabeçalho
+                total_pages = (total_rows + per_page - 1) // per_page
+                return render_template("ConjuntoDeDados/vercsv.html", 
+                                   nome_ficheiro=dataset.nome,
+                                   dataset_id=dataset.id,
+                                    header=header,
+                                    dados=df.values,
+                                    page=page,
+                                    total_pages=total_pages, current_page="ConjuntosDeDados")
+            except Exception as e:
+                try:
+                    df = pd.read_csv(dataset.caminho, delimiter= ',', skiprows=range(1, start_row + 1),
+                                      nrows=per_page, encoding='utf-8', on_bad_lines='skip')
+                    header = pd.read_csv(dataset.caminho, nrows=0, delimiter= ',', encoding='utf-8').columns.tolist()
+
+                    total_rows = sum(1 for _ in open(dataset.caminho)) - 1  # -1 para excluir o cabeçalho
+                    total_pages = (total_rows + per_page - 1) // per_page
+                    return render_template("ConjuntoDeDados/vercsv.html", 
+                                    nome_ficheiro=dataset.nome,
+                                    dataset_id=dataset.id,
+                                    header=header,
+                                    dados=df.values,
+                                    page=page,
+                                    total_pages=total_pages, current_page="ConjuntosDeDados")
+                except Exception as e:
+                    print(f"Erro ao ler o ficheiro: {e}", "error")
+                    return redirect(request.url)
+            
+        else:
+            return "Dataset não encontrado", 404
+    else: 
+        return redirect(url_for("login"))
 
