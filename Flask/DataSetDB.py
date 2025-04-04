@@ -39,3 +39,12 @@ def createDataset(num_reg, utilizador_ID, nome , caminho):
         db.session.rollback() 
         print(f"Erro ao guardar o DataSet: {e}")
         return False
+    
+def getDatasets(user_id):
+    try:
+        db_search = Dataset.query.filter_by(utilizador_id=user_id).all()
+        return db_search
+    except Exception as e:
+        db.session.rollback()  # Corrigido o rollback
+        print(f"Erro ao encontrar Datasets: {e}")
+        return None

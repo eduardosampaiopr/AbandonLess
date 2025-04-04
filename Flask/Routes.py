@@ -179,7 +179,8 @@ def removeUser(user_id):
 @app.route("/ConjuntosDeDados")
 def ConjIndex():
     if "user" in session:
-        return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
+        allDatasets = getDatasets(session["id"])
+        return render_template("ConjuntoDeDados/conjuntodedados.html", datasets = allDatasets, current_page="ConjuntosDeDados")
     else: 
         return redirect(url_for("login"))
 

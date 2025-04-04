@@ -34,29 +34,25 @@
                                         <tr>
                                             <th scope="col">ID</th>
                                             <th scope="col">Nome</th>
-                                            <th scope="col">Autor</th>
                                             <th scope="col">Exemplos</th>
                                             <th scope="col">Data de Upload</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {%for d in datasets%}
                                         <tr>
-                                            <th scope="row" class="text-center">1</th>
-                                            <td>Ulus2023.csv</td>
-                                            <td>Marco Ovelhas</td>
-                                            <td class="text-end">5983</td>
-                                            <td class="text-center">23-01-2024</td>
-                                            <td><a href="#"><img class="iconlog" src="../Imagens/icons/lupa.png"></a></td>
+                                            <th scope="row">{{d.id}}</th>
+                                            <td>{{d.nome}}</td>
+                                            <td>{{d.num_registos}}</td>
+                                            <td>{{d.data_upload}}</td>
+                                            <td class="text-center" >
+                                                <a href="{{ url_for('NovoDataset')}}">
+                                                    <img src="{{url_for('static', filename='/Imagens/icons/lupa.png')}}" class="icon">
+                                                </a>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row" class="text-center">2</th>
-                                            <td>Ulus2023.csv</td>
-                                            <td>Tomás</td>
-                                            <td class="text-end">3000</td>
-                                            <td class="text-center">23-02-2024</td>
-                                            <td><a href="#"><img class="iconlog" src="../Imagens/icons/lupa.png"></a></td>
-                                        </tr>
+                                        {%endfor%}
                                     </tbody>
                                 </table>
                             </div>
