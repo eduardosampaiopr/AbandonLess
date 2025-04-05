@@ -58,3 +58,19 @@ def getDatasetByID(id):
     except Exception as e:
         print(f"Erro ao encontrar dataset por ID: {e}")
         return None
+    
+def remDataset(id):
+    try:
+        ds = getDatasetByID(id)
+        if ds:
+            db.session.delete(ds)
+            db.session.commit()
+            print(f'Dataset {id} removido com sucesso!')
+            return True
+        else:
+            print(f"Erro: Nenhum dataset encontrado com ID {id}")
+            return False
+    except Exception as e:
+        db.session.rollback() 
+        print(f"Erro ao eliminar Dataset: {e}")
+        return False

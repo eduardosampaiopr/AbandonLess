@@ -238,6 +238,8 @@ def NovoDataset():
 def verDataset(dataset_id):
     if "user" in session:
         dataset = getDatasetByID(dataset_id)
+        session["dataset_id"] = dataset_id
+        print(f"ID do dataset: {dataset_id}")
         if dataset:
             page = int(request.args.get("page", 1))
             per_page = 50  
@@ -281,3 +283,11 @@ def verDataset(dataset_id):
     else: 
         return redirect(url_for("login"))
 
+@app.route("/removerConjuntodeDados/<int:dataset_id>", methods=["POST"])
+def removeDataset(dataset_id):
+    if "user" in session:
+        if remDataset(dataset_id):
+            return jsonify({"success": True, "message": "Dataset removido com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Dataset não encontrado."})
+    return jsonify({"success": False, "message": "É preciso estar logado."})

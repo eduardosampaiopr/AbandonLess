@@ -57,16 +57,19 @@
                         </a>
                     </li>
                 </ul>
+                {% if session["dataset_id"] %}
                 <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="conjuntos-menu2">
                     <li>
-                        <a href="{{ url_for('NovoDataset') }}" 
+                        <p>O ID original é: {{ session["dataset_id"] }}</p>
+                        <a href="#" 
                         class=" submenu-item link-eliminar" 
-                        style="font-size: 0.9rem;">
-                        <span>Eliminar Conjunto de Dados</span>
-                     </a>
-                     
+                        style="font-size: 0.9rem;"
+                        onclick="event.preventDefault(); confirmDelete({{ session['dataset_id'] }});">
+                            <span>Eliminar Conjunto de Dados</span>
+                        </a>
                     </li>
                 </ul>
+                {% endif %}
             </li>
         </ul>
         <div class="LogOut">
@@ -75,6 +78,7 @@
         </div>
     </div>   
     
+    <!--Script Para controlar os submenos de acordo com a página atual-->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let currentPage = "{{ current_page }}";  // Página atual do Flask
@@ -92,6 +96,25 @@
                 document.getElementById("conjuntos-menu2").style.display = "block";
             }
         });
+        </script>
+
+        <!--Script Eliminar-->
+        <script>
+            function confirmDelete(datasetId) {
+                console.log("ID recebido:", datasetId);
+                datasetId = parseInt(datasetId);
+                if (confirm("Deseja eliminar este dataset?")) {
+                    fetch(`/removerConjuntodeDados/${datasetId}`, { method: "POST" })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            if (data.success) {
+                                window.location.href = "{{ url_for('ConjIndex') }}";
+                            }
+                        })
+                        .catch(error => console.error("Erro:", error));
+                }
+            }
         </script>
 
 </body>
