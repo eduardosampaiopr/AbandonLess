@@ -2,6 +2,7 @@ from Main import app
 from flask import render_template, session, url_for, redirect, request, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, pandas as pd
+from io import BytesIO, TextIOWrapper
 
 from UtilizadorDB import *
 from DataSetDB import *
@@ -194,45 +195,57 @@ def NovoDataset():
                 return redirect(request.url)
 
             upload_file = request.files["file"]
-            file_path = os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename)
 
             if upload_file.filename == "":
-                flash("Ficherio sem nome.", "error")
+                flash("Ficheiro sem nome.", "error")
                 return redirect(request.url)
-            
+
             if not os.path.exists(app.config["UPLOAD_FOLDER"]):
                 os.makedirs(app.config["UPLOAD_FOLDER"])
 
-            # Ler o ficheiro para validação
+            file_path = os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename)
+
             try:
-                upload_file.seek(0)
-                texto_ficheiro = TextIOWrapper(upload_file, encoding='utf-8')
-                reader = csv.reader(texto_ficheiro)
+                
+                # Lê tudo para memória
+                file_bytes = upload_file.read()
+                buffer = BytesIO(file_bytes)
 
-                # COUNT de registos
-                registos = list(reader)
-                num_registos = len(registos)
-                cabecalho = registos[0] if registos else [] #Obter cabeçalho
+                # Deteta delimitador automaticamente
+                delimitador = obter_delimitador(buffer)
 
-                #Verificar se existe uma coluna Target
-                if "Target" in cabecalho:
-                    pass
-                else:
-                    flash(f"Não existe nenhuma coluna chamada 'Target' neste Dataset", "danger")
-                    upload_file.seek(0)
+                buffer.seek(0)
+                df = pd.read_csv(buffer, delimiter=delimitador)
+
+                # Verificar campos vazios
+                if df.isnull().values.any():
+                    flash("O dataset contém campos vazios. Por favor, limpe os dados antes de continuar.", "warning")
                     return redirect(request.url)
-                # Se todas as validações passarem, guardar o ficheiro e os dados na base de dados
-                upload_file.save(file_path)
+
+                # Verificar existência da coluna 'Target'
+                if 'Target' not in df.columns:
+                    flash(f"Não existe nenhuma coluna chamada 'Target' neste Dataset", "danger")
+                    return redirect(request.url)
+
+                num_registos = df.shape[0]  # Número de linhas
+
+                # Guarda o ficheiro no sistema de ficheiros
+                with open(file_path, 'wb') as f_out:
+                    f_out.write(file_bytes)
+
+
             except Exception as e:
                 flash(f"Erro ao processar o ficheiro: {e}", "error")
                 return redirect(request.url)
 
-            createDataset(num_registos, session["id"], upload_file.filename, os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename))
-                
+            # Guarda info na BD
+            createDataset(num_registos, session["id"], upload_file.filename, file_path)
 
         return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
     else: 
         return redirect(url_for("login"))
+
+
 
 @app.route("/ConjuntosDeDados/<int:dataset_id>")
 def verDataset(dataset_id):

@@ -2,9 +2,10 @@ from Main import db
 import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, LargeBinary, JSON
 from sqlalchemy.orm import relationship
-
+import os
 from io import TextIOWrapper
 import csv
+import pandas as pd
 
 class Dataset(db.Model):
     __tablename__ = 'dataset'
@@ -63,6 +64,11 @@ def remDataset(id):
     try:
         ds = getDatasetByID(id)
         if ds:
+            if ds.caminho and os.path.isfile(ds.caminho):
+                os.remove(ds.caminho)
+                print(f"Ficheiro {ds.caminho} removido com sucesso.")
+            else:
+                print(f"Ficheiro não encontrado ou caminho inválido: {ds.caminho}")
             db.session.delete(ds)
             db.session.commit()
             print(f'Dataset {id} removido com sucesso!')
@@ -70,7 +76,43 @@ def remDataset(id):
         else:
             print(f"Erro: Nenhum dataset encontrado com ID {id}")
             return False
+        
     except Exception as e:
         db.session.rollback() 
         print(f"Erro ao eliminar Dataset: {e}")
         return False
+    
+def verificar_campos_vazios(linhas_csv):
+    """
+    Recebe uma lista de listas (linhas do CSV) e retorna True se houver campos vazios.
+    Ignora a primeira linha (cabeçalho).
+    """
+    for i, linha in enumerate(linhas_csv[1:], start=2):  # start=2 para indicar linha real do CSV
+        for valor in linha:
+            if valor.strip() == "":
+                print(f"Campo vazio encontrado na linha {i}")
+                return True
+    return False
+
+
+def obter_delimitador(buffer):
+    buffer.seek(0)
+    sample = buffer.read(2048).decode('utf-8', errors='ignore')
+    buffer.seek(0)
+
+    try:
+        sniffer = csv.Sniffer()
+        dialect = sniffer.sniff(sample)
+        print(f"[Sniffer] Delimitador detetado: '{dialect.delimiter}'")
+        return dialect.delimiter
+    except csv.Error:
+        # Fallback simples baseado em contagem
+        print("[Sniffer] Erro ao detetar delimitador. Análise manual em curso...")
+        if sample.count(';') > sample.count(','):
+            print("[Heurística] Delimitador escolhido: ';'")
+            return ';'
+        else:
+            print("[Heurística] Delimitador escolhido: ','")
+            return ','
+
+
