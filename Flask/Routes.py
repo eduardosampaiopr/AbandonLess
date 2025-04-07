@@ -287,7 +287,17 @@ def verDataset(dataset_id):
 def removeDataset(dataset_id):
     if "user" in session:
         if remDataset(dataset_id):
+            session.pop("dataset_id", None)
             return jsonify({"success": True, "message": "Dataset removido com sucesso!"})
         else:
             return jsonify({"success": False, "message": "Dataset não encontrado."})
     return jsonify({"success": False, "message": "É preciso estar logado."})
+
+#Módulo de Modelação
+@app.route("/Modelacao")
+def modeloIndex():
+    if "user" in session:
+        allModels = getModels()
+        return render_template("Modelacao/Modelacao.html", current_page="Modelacao")
+    else: 
+        return redirect(url_for("login"))

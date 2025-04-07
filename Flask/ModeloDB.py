@@ -21,3 +21,12 @@ class ModeloPreditivo(db.Model):
     utilizador = relationship('Utilizador', back_populates='modelos')
     dataset_criacao = relationship('Dataset', back_populates='modelos')
     previsoes = relationship('Previsao', back_populates='modelo')
+
+def getModels():
+    try:
+        db_search = ModeloPreditivo.query.all()
+        return db_search
+    except Exception as e:
+        db.session.rollback()  
+        print(f"Erro ao encontrar Datasets: {e}")
+        return 0

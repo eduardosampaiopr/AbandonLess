@@ -32,12 +32,15 @@
             </li>
             {% if session["tipo_utilizador"] == "Data Scientist" %}
             <li class="nav-item">
-                <a href="#" class="nav-link text-black">
+                <a href="{{url_for('modeloIndex')}}" class="nav-link text-black">
                     <span class="d-none d-sm-inline main">Modelação</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" id="modelacao-menu">
                     <li>
-                        <a href="#" class="text-black submenu-item">
+                        <a href="#" class="text-black submenu-item"
+                        style="text-decoration: none; font-size: 0.9rem;"
+                        onmouseover="this.style.textDecoration='underline'"
+                        onmouseout="this.style.textDecoration='none'">
                             <span>Criar Novo Modelo</span>
                         </a>
                     </li>
@@ -45,7 +48,7 @@
             </li>
             {% endif %}
             <li class="nav-item">
-                <a href="{{url_for('ConjIndex')}}" class="nav-link text-black active">
+                <a href="{{url_for('ConjIndex')}}" class="nav-link text-black">
                     <span class="d-none d-sm-inline main">Conjuntos de Dados</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="conjuntos-menu">
@@ -88,7 +91,7 @@
             // Mostra apenas o submenu da página atual
             if (currentPage === "Previsão") {
                 document.getElementById("previsao-menu").style.display = "block";
-            } else if (currentPage === "Modelação") {
+            } else if (currentPage === "Modelacao") {
                 document.getElementById("modelacao-menu").style.display = "block";
             } else if (currentPage === "ConjuntosDeDados") { 
                 document.getElementById("conjuntos-menu").style.display = "block";
