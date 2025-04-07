@@ -17,7 +17,7 @@
         <hr class="text-white">
         <ul class="nav nav-pills flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link text-black">
+                <a href="#" class="nav-link text-black" id="link-previsao">
                     <span class="d-none d-sm-inline main">Previsão</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="previsao-menu">
@@ -32,7 +32,7 @@
             </li>
             {% if session["tipo_utilizador"] == "Data Scientist" %}
             <li class="nav-item">
-                <a href="{{url_for('modeloIndex')}}" class="nav-link text-black">
+                <a href="{{url_for('modeloIndex')}}" class="nav-link text-black" id="link-modelacao">
                     <span class="d-none d-sm-inline main">Modelação</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" id="modelacao-menu">
@@ -48,7 +48,7 @@
             </li>
             {% endif %}
             <li class="nav-item">
-                <a href="{{url_for('ConjIndex')}}" class="nav-link text-black">
+                <a href="{{url_for('ConjIndex')}}" class="nav-link text-black" id="link-conjuntos">
                     <span class="d-none d-sm-inline main">Conjuntos de Dados</span>
                 </a>
                 <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="conjuntos-menu">
@@ -86,16 +86,21 @@
             let currentPage = "{{ current_page }}";  // Página atual do Flask
         
             document.querySelectorAll('.submenu').forEach(menu => menu.style.display = 'none');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove("active"));
         
             // Mostra apenas o submenu da página atual
             if (currentPage === "Previsão") {
                 document.getElementById("previsao-menu").style.display = "block";
+                document.getElementById("link-previsao").classList.add("active");
             } else if (currentPage === "Modelacao") {
                 document.getElementById("modelacao-menu").style.display = "block";
+                document.getElementById("link-modelacao").classList.add("active");
             } else if (currentPage === "ConjuntosDeDados") { 
                 document.getElementById("conjuntos-menu").style.display = "block";
+                document.getElementById("link-conjuntos").classList.add("active");
             } else if (currentPage === "ConjuntosDeDados2") { 
                 document.getElementById("conjuntos-menu2").style.display = "block";
+                document.getElementById("link-conjuntos").classList.add("active");
             }
         });
         </script>
