@@ -82,17 +82,7 @@ def remDataset(id):
         print(f"Erro ao eliminar Dataset: {e}")
         return False
     
-def verificar_campos_vazios(linhas_csv):
-    """
-    Recebe uma lista de listas (linhas do CSV) e retorna True se houver campos vazios.
-    Ignora a primeira linha (cabeçalho).
-    """
-    for i, linha in enumerate(linhas_csv[1:], start=2):  # start=2 para indicar linha real do CSV
-        for valor in linha:
-            if valor.strip() == "":
-                print(f"Campo vazio encontrado na linha {i}")
-                return True
-    return False
+
 
 
 def obter_delimitador(buffer):

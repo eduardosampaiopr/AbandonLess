@@ -219,20 +219,19 @@ def NovoDataset():
 
                 # Verificar campos vazios
                 if df.isnull().values.any():
-                    flash("O dataset contém campos vazios. Por favor, limpe os dados antes de continuar.", "warning")
-                    return redirect(request.url)
+                    flash("O dataset contém campos vazios. Caso deseja prosseguir o sistema vai remover as linhas com esses campos.", "warning")
+                    df = df.dropna()
 
                 # Verificar existência da coluna 'Target'
                 if 'Target' not in df.columns:
                     flash(f"Não existe nenhuma coluna chamada 'Target' neste Dataset", "danger")
                     return redirect(request.url)
 
-                num_registos = df.shape[0]  # Número de linhas
+                num_registos = df.shape[0]  # Número de linhas após remoção dos NaN
 
                 # Guarda o ficheiro no sistema de ficheiros
                 with open(file_path, 'wb') as f_out:
-                    f_out.write(file_bytes)
-
+                    df.to_csv(f_out, index=False, encoding='utf-8')
 
             except Exception as e:
                 flash(f"Erro ao processar o ficheiro: {e}", "error")
@@ -253,48 +252,50 @@ def verDataset(dataset_id):
         dataset = getDatasetByID(dataset_id)
         session["dataset_id"] = dataset_id
         print(f"ID do dataset: {dataset_id}")
+        
         if dataset:
             page = int(request.args.get("page", 1))
-            per_page = 50  
+            per_page = 50
             start_row = (page - 1) * per_page
 
             try:
-                df = pd.read_csv(dataset.caminho, delimiter= ';', skiprows=range(1, start_row + 1), nrows=per_page,
-                                  encoding='utf-8', on_bad_lines='skip')
-                header = pd.read_csv(dataset.caminho, delimiter= ';', nrows=0, encoding='utf-8').columns.tolist()
+                # Abrir o ficheiro e preparar buffer para detetar delimitador
+                with open(dataset.caminho, "rb") as f:
+                    file_bytes = f.read()
+                    buffer = BytesIO(file_bytes)
+                    delimitador = obter_delimitador(buffer)
 
-                total_rows = sum(1 for _ in open(dataset.caminho)) - 1  # -1 para excluir o cabeçalho
+                # Lê os dados com pandas
+                buffer.seek(0)
+                df = pd.read_csv(BytesIO(file_bytes), delimiter=delimitador,
+                                 skiprows=range(1, start_row + 1), nrows=per_page,
+                                 encoding='utf-8', on_bad_lines='skip')
+
+                buffer.seek(0)
+                header = pd.read_csv(BytesIO(file_bytes), delimiter=delimitador,
+                                     nrows=0, encoding='utf-8').columns.tolist()
+
+                total_rows = sum(1 for _ in open(dataset.caminho, encoding='utf-8')) - 1
                 total_pages = (total_rows + per_page - 1) // per_page
-                return render_template("ConjuntoDeDados/vercsv.html", 
-                                   nome_ficheiro=dataset.nome,
-                                   dataset_id=dataset.id,
-                                    header=header,
-                                    dados=df.values,
-                                    page=page,
-                                    total_pages=total_pages, current_page="ConjuntosDeDados2")
-            except Exception as e:
-                try:
-                    df = pd.read_csv(dataset.caminho, delimiter= ',', skiprows=range(1, start_row + 1),
-                                      nrows=per_page, encoding='utf-8', on_bad_lines='skip')
-                    header = pd.read_csv(dataset.caminho, nrows=0, delimiter= ',', encoding='utf-8').columns.tolist()
 
-                    total_rows = sum(1 for _ in open(dataset.caminho)) - 1  # -1 para excluir o cabeçalho
-                    total_pages = (total_rows + per_page - 1) // per_page
-                    return render_template("ConjuntoDeDados/vercsv.html", 
-                                    nome_ficheiro=dataset.nome,
-                                    dataset_id=dataset.id,
-                                    header=header,
-                                    dados=df.values,
-                                    page=page,
-                                    total_pages=total_pages, current_page="ConjuntosDeDados2")
-                except Exception as e:
-                    print(f"Erro ao ler o ficheiro: {e}", "error")
-                    return redirect(request.url)
-            
+                return render_template("ConjuntoDeDados/vercsv.html", 
+                    nome_ficheiro=dataset.nome,
+                    dataset_id=dataset.id,
+                    header=header,
+                    dados=df.values,
+                    page=page,
+                    total_pages=total_pages,
+                    current_page="ConjuntosDeDados2"
+                )
+            except Exception as e:
+                print(f"Erro ao ler o ficheiro: {e}")
+                flash(f"Erro ao ler o ficheiro: {e}", "error")
+                return redirect(request.url)
         else:
             return "Dataset não encontrado", 404
     else: 
         return redirect(url_for("login"))
+
 
 @app.route("/removerConjuntodeDados/<int:dataset_id>", methods=["POST"])
 def removeDataset(dataset_id):
