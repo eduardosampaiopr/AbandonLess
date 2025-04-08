@@ -205,6 +205,10 @@ def NovoDataset():
 
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], upload_file.filename)
 
+            if checkIfExists(upload_file.filename, session["id"]):
+                flash("Já existe um dataset com esse nome.", "danger")
+                return redirect(request.url)
+
             try:
                 
                 # Lê tudo para memória

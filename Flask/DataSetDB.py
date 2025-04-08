@@ -82,8 +82,15 @@ def remDataset(id):
         print(f"Erro ao eliminar Dataset: {e}")
         return False
     
-
-
+def checkIfExists(nome, id):
+    try:
+        db_search = Dataset.query.filter_by(nome = nome, utilizador_id = id).first()
+        if db_search:
+            print(f"Dataset {nome} já existe com o id: {db_search.id}")
+            return True
+    except Exception as e:
+        db.session.rollback()
+        print(f"Erro ao verificar se o dataset existe: {e}")
 
 def obter_delimitador(buffer):
     buffer.seek(0)
