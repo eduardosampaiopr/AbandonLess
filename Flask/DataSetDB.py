@@ -1,6 +1,6 @@
 from Main import db
 import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, LargeBinary, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, LargeBinary, JSON, Boolean
 from sqlalchemy.orm import relationship
 import os
 from io import TextIOWrapper
@@ -18,19 +18,21 @@ class Dataset(db.Model):
     utilizador_id = Column(Integer, ForeignKey('utilizador.id'))
     data_criacao = Column(DateTime, default=datetime.datetime.utcnow)
     data_atualizacao = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    is_treino = Column(Boolean, default=True)
 
     utilizador = relationship('Utilizador', back_populates='datasets')
     modelos = relationship('ModeloPreditivo', back_populates='dataset_criacao')
     previsoes = relationship('Previsao', back_populates='dataset_execucao')
 
-def createDataset(num_reg, utilizador_ID, nome , caminho):
+def createDataset(num_reg, utilizador_ID, nome , caminho, is_treino):
 
     try:
         new_dataSet = Dataset(
             nome=nome,
             caminho=caminho,
             num_registos=num_reg,
-            utilizador_id=utilizador_ID
+            utilizador_id=utilizador_ID,
+            is_treino = is_treino
         )
         db.session.add(new_dataSet)
         db.session.commit()  # Corrigido o commit

@@ -35,6 +35,7 @@
                                             <th scope="col">ID</th>
                                             <th scope="col">Nome</th>
                                             <th scope="col">Exemplos</th>
+                                            <th scope="col">Propósito</th>
                                             <th scope="col">Data de Upload</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -45,6 +46,11 @@
                                             <th scope="row">{{d.id}}</th>
                                             <td>{{d.nome}}</td>
                                             <td>{{d.num_registos}}</td>
+                                            {%if d.is_treino == True%}
+                                            <td>Treino</td>
+                                            {%else%}
+                                            <td>Previsão</td>
+                                            {%endif%}
                                             <td>{{d.data_upload}}</td>
                                             <td class="text-center" >
                                                 <a href="{{ url_for('verDataset',  dataset_id=d.id)}}">
@@ -70,14 +76,23 @@
                                         <label for="Data" class="form-label">Data de Upload</label>
                                         <input type="date" class="form-control" id="campo3">
                                     </div>
+
+                                    <div class="col-12">
+                                        <label for="Data" class="form-label">Propósito</label>
+                                        <select class="form-control" id="campo2">
+                                            <option value="">Todos</option>
+                                            <option value="Treino">Treino</option>
+                                            <option value="Previsão">Previsão</option>
+                                        </select>
+                                    </div>
                                     <!-- Número de Registos -->
                                     <div class="col-12">
                                         <label class="form-label">Exemplos</label>
                                         <div class="d-flex">
                                             <label class="me-1">Min:</label>
-                                            <input type="text" class="form-control form-control-sm me-2" id="campo 4">
+                                            <input type="text" class="form-control form-control-sm me-2" id="minExemplos">
                                             <label class="me-1">Max:</label>
-                                            <input type="text" class="form-control form-control-sm" id="campo 4">
+                                            <input type="text" class="form-control form-control-sm" id="maxExemplos">
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -96,42 +111,47 @@
     </div>
 
     <script>
-       document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector("form").addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita o recarregamento da página
-
-        let nomeFiltro = document.getElementById("campo1").value.toLowerCase();
-        let dataFiltro = document.getElementById("campo3").value;
-        let minExemplos = document.querySelectorAll("#campo\\ 4")[0].value;
-        let maxExemplos = document.querySelectorAll("#campo\\ 4")[1].value;
-
-        let linhas = document.querySelectorAll("tbody tr");
-
-        linhas.forEach(linha => {
-            let nome = linha.cells[1].textContent.toLowerCase();
-            let exemplos = parseInt(linha.cells[3].textContent) || 0;
-            let data = linha.cells[4].textContent;
-
-            // Converter formato de data DD-MM-YYYY para YYYY-MM-DD
-            let dataSplit = data.split("-");
-            let dataFormatada = `${dataSplit[2]}-${dataSplit[1]}-${dataSplit[0]}`;
-            let nomeMatch = nome.includes(nomeFiltro) || nomeFiltro === "";
-            
-            let dataMatch = dataFormatada === dataFiltro || dataFiltro === "";
-            let minMatch = minExemplos === "" || exemplos >= parseInt(minExemplos);
-            let maxMatch = maxExemplos === "" || exemplos <= parseInt(maxExemplos);
-
-            if (nomeMatch && dataMatch && minMatch && maxMatch) {
-                linha.style.display = "";
-            } else {
-                linha.style.display = "none";
-            }
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector("form").addEventListener("submit", function (event) {
+                event.preventDefault(); // Evita o recarregamento da página
+        
+                let nomeFiltro = document.getElementById("campo1").value.toLowerCase();
+                let propositoFiltro = document.getElementById("campo2").value.toLowerCase();
+                let dataFiltro = document.getElementById("campo3").value;
+                let minExemplos = document.getElementById("minExemplos").value;
+                let maxExemplos = document.getElementById("maxExemplos").value;
+        
+                let linhas = document.querySelectorAll("tbody tr");
+        
+                linhas.forEach(linha => {
+                    let nome = linha.cells[1].textContent.toLowerCase();
+                    let exemplos = parseInt(linha.cells[2].textContent) || 0;
+                    let proposito = linha.cells[3].textContent.toLowerCase();
+                    let data = linha.cells[4].textContent;
+        
+                    // Converter data DD-MM-YYYY → YYYY-MM-DD (se necessário)
+                    let dataSplit = data.split("-");
+                    let dataFormatada = dataSplit.length === 3
+                        ? `${dataSplit[2]}-${dataSplit[1]}-${dataSplit[0]}`
+                        : "";
+        
+                    let nomeMatch = nome.includes(nomeFiltro) || nomeFiltro === "";
+                    let propositoMatch = proposito === propositoFiltro || propositoFiltro === "";
+                    let dataMatch = dataFormatada === dataFiltro || dataFiltro === "";
+                    let minMatch = minExemplos === "" || exemplos >= parseInt(minExemplos);
+                    let maxMatch = maxExemplos === "" || exemplos <= parseInt(maxExemplos);
+        
+                    if (nomeMatch && propositoMatch && dataMatch && minMatch && maxMatch) {
+                        linha.style.display = "";
+                    } else {
+                        linha.style.display = "none";
+                    }
+                });
+            });
         });
-    });
-});
-
-
-    </script>
+        </script>
+        
+        
 
 </body>
 </html>

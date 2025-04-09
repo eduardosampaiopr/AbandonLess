@@ -189,6 +189,8 @@ def ConjIndex():
 @app.route("/ConjuntosDeDados/NovoConjunto", methods=["POST", "GET"])
 def NovoDataset():
     if "user" in session:
+        flash("Caso deseje que o Dataset seja utilizado para treino de outros modelos, por favor certifique-se que a variável objetivo tem o nome 'Target' e está é binária.", "info")
+        flash("Caso o conjunto de dados contenha campos vazios, o sistema irá remover as linhas com esses campos.", "info")
         if request.method == "POST":
             if "file" not in request.files:
                 flash("Nenhum Ficheiro Submetido.", "error")
@@ -208,7 +210,7 @@ def NovoDataset():
             if checkIfExists(upload_file.filename, session["id"]):
                 flash("Já existe um dataset com esse nome.", "danger")
                 return redirect(request.url)
-
+            
             try:
                 
                 # Lê tudo para memória
@@ -221,28 +223,32 @@ def NovoDataset():
                 buffer.seek(0)
                 df = pd.read_csv(buffer, delimiter=delimitador)
 
-                # Verificar campos vazios
+                # Verificar campos vazios e remove
                 if df.isnull().values.any():
-                    flash("O dataset contém campos vazios. Caso deseja prosseguir o sistema vai remover as linhas com esses campos.", "warning")
                     df = df.dropna()
+
 
                 # Verificar existência da coluna 'Target'
                 if 'Target' not in df.columns:
-                    flash(f"Não existe nenhuma coluna chamada 'Target' neste Dataset", "danger")
-                    return redirect(request.url)
-
+                    is_treino = False
+                    if df['Target'].nunique() > 2:
+                        flash("A coluna 'Target' tem mais de 2 valores distintos. O sistema só aceita variáveis objetivo binárias.", "danger")
+                        return redirect(request.url)
+                else:
+                    is_treino = True
+                    
                 num_registos = df.shape[0]  # Número de linhas após remoção dos NaN
 
                 # Guarda o ficheiro no sistema de ficheiros
                 with open(file_path, 'wb') as f_out:
                     df.to_csv(f_out, index=False, encoding='utf-8')
 
+                createDataset(num_registos, session["id"], upload_file.filename, file_path, is_treino)
+
             except Exception as e:
                 flash(f"Erro ao processar o ficheiro: {e}", "error")
                 return redirect(request.url)
 
-            # Guarda info na BD
-            createDataset(num_registos, session["id"], upload_file.filename, file_path)
 
         return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
     else: 
