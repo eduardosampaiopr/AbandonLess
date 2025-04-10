@@ -28,7 +28,7 @@ def login():
                 hashed_password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=16)
                 user.password = hashed_password
                 try:
-                    db.session.commit()  # SALVANDO no banco corretamente
+                    db.session.commit()  
                     print(f"Senha do utilizador {username} atualizada para formato seguro.")
                 except Exception as e:
                     db.session.rollback()
@@ -41,8 +41,8 @@ def login():
                 session["tipo_utilizador"] = user.tipo_utilizador
                 session["id"] = user.id
     
-    else:
-        flash("Nome de utilizador ou senha inválidos.", "danger")
+        else:
+            flash("Nome de utilizador ou senha inválidos.", "danger")
             
     if "user" in session:
         if session["tipo_utilizador"] == "Administrador":
