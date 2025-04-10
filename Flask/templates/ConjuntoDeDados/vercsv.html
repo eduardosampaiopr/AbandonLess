@@ -22,9 +22,9 @@
                     <img src="{{ url_for('static', filename='/Imagens/Icons/dataset.png') }}" class="img-fluid icon-size ms-3">
                 </div>
 
-                <div class="container mt-4 p-4">
+                <div class="container p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered mt-0">
+                        <table class="table table-bordered mt-1">
                             <thead>
                                 <tr>
                                     {% for col in header %}
@@ -64,6 +64,11 @@
                             {% endif %}
                         </ul>
                     </nav>
+                    <div class="d-flex align-items-start">
+                        <a href="{{ url_for('ConjIndex') }}">
+                            <button type="button" class="btn btn-secondary px-5" id="btn-back" style="width: 120px;">Voltar</button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
