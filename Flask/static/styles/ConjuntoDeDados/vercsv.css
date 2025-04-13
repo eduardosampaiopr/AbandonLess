@@ -55,3 +55,20 @@ body {
     margin: auto; /* Centraliza */
     overflow-x: auto;
 }
+.filtro {
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    max-width: 60vw;
+    padding: 1em;
+}
+
+.info-box {
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.5em 0.8em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-weight: 500;
+    font-size: 0.95em;
+    margin-top: 0.3em;
+    white-space: nowrap;;
+}

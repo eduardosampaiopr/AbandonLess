@@ -290,6 +290,8 @@ def verDataset(dataset_id):
 
                 return render_template("ConjuntoDeDados/vercsv.html", 
                     nome_ficheiro=dataset.nome,
+                    num_reg=dataset.num_registos,
+                    prop = dataset.is_treino,
                     dataset_id=dataset.id,
                     header=header,
                     dados=df.values,
