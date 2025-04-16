@@ -227,15 +227,14 @@ def NovoDataset():
                 if df.isnull().values.any():
                     df = df.dropna()
 
-
                 # Verificar existência da coluna 'Target'
-                if 'Target' not in df.columns:
-                    is_treino = False
+                if 'Target'  in df.columns:
+                    is_treino = True
                     if df['Target'].nunique() > 2:
                         flash("A coluna 'Target' tem mais de 2 valores distintos. O sistema só aceita variáveis objetivo binárias.", "danger")
                         return redirect(request.url)
                 else:
-                    is_treino = True
+                    is_treino = False
                     
                 num_registos = df.shape[0]  # Número de linhas após remoção dos NaN
 
@@ -327,13 +326,47 @@ def modeloIndex():
         return render_template("Modelacao/Modelacao.html", current_page="Modelacao")
     else: 
         return redirect(url_for("login"))
-
-@app.route("/Modelacao/NovoModelo", methods = ["POST", "GET"])
-def novoModelo():
+    
+@app.route("/Modelacao/NovoModelo/Form", methods = ["POST", "GET"])
+def novoModeloForm():
     if "user" in session:
-        return render_template("Modelacao/criar_modelo.html", current_page="Modelacao")
+        dataset_id = request.form.get("dataset_id")
+        if not dataset_id:
+            flash("Nenhum dataset selecionado.", "danger")
+            return redirect(url_for("novoModeloDS"))
+    
+        dataset = getDatasetByID(dataset_id)
+
+        if dataset:
+            try:
+                
+                with open(dataset.caminho, "rb") as f:
+                    file_bytes = f.read()
+                    buffer = BytesIO(file_bytes)
+                    delimitador = obter_delimitador(buffer)
+
+                buffer.seek(0)
+                df = pd.read_csv(buffer, delimiter=delimitador)
+                columns = df.columns.tolist()
+
+            except Exception as e:
+                flash(f"Erro ao processar o ficheiro: {e}", "error")
+                return redirect(request.url)
+        else:
+            return "Dataset não encontrado", 404
+
+        return render_template("Modelacao/criar_modelo.html", colunas_dataset = columns, current_page="Modelacao")
     else: 
         return redirect(url_for("login"))
+
+@app.route("/Modelacao/NovoModelo", methods = ["POST", "GET"])
+def novoModeloDS():
+    if "user" in session:
+        datasets = getTrainDataset(session["id"])
+        return render_template("Modelacao/modelacao_DS.html", datasets = datasets, current_page="Modelacao")
+    else: 
+        return redirect(url_for("login"))
+
 
     
 #Módulo de Previsão

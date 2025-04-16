@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/Modelacao/modelacao_DS.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <title>AbandonLess</title>
+</head>
+<body>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'sidebar.html' %}
+            <div class="col p-4 d-flex flex-column min-vh-100" id="main-content">
+
+                <div class="col p-4" id="main-content">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <h1 class="display-1">Criar Modelo</h1>
+                        <img src="{{url_for('static', filename='Imagens/icons/modelacao.png')}}" class="img-fluid icon-size ms-3">
+                    </div>
+
+                    <div class="container mt-3">
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                {% for category, msg in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ msg }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+    
+
+                <div class="d-flex justify-content-center mb-2">
+                    <h3>Selecione o Conjunto de Dados para Teste</h3>
+                </div>
+
+                <!--Filtro-->
+                <div class="filtro p-4 ">
+                    <form id="form-filtro" class="row g-3 align-items-end justify-content-between bk-dark d-flex">
+                        <div class="col-md-3">
+                            <label for="Ficheiro" class="form-label">Ficheiro</label>
+                            <input type="text" class="form-control" id="campo1" placeholder="Insira o nome do Ficheiro">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="Data" class="form-label">Data de Upload</label>
+                            <input type="date" class="form-control" id="campo3">
+                        </div>
+                        <!--Número de Registos-->
+                        <div class="col-md-2">
+                            <label for="NumRegistos" class="form-label">Número de Registos</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <label for="min">Min:</label>
+                                    <input type="text" class="form-control form-control-sm me-2 ms-1" id="campo4">
+                                    <label for="max">Max:</label>
+                                    <input type="text" class="form-control form-control-sm me-2 ms-1" id="campo4">
+                                </div>
+                            </div>
+                                
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--tabela-->
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-bordered mt-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Exemplos</th>
+                                    <th scope="col">Propósito</th>
+                                    <th scope="col">Data de Upload</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for d in datasets%}
+                                <tr>
+                                    <th scope="row">{{d.id}}</th>
+                                    <td>{{d.nome}}</td>
+                                    <td>{{d.num_registos}}</td>
+                                    {%if d.is_treino == True%}
+                                    <td>Treino</td>
+                                    {%else%}
+                                    <td>Previsão</td>
+                                    {%endif%}
+                                    <td>{{d.data_upload}}</td>
+                                    <td class="text-center" >
+                                        <button type="button" class="btn btn-primary btn-custom selecionar">
+                                            Selecionar
+                                        </button>
+                                    </td>
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            
+                <!--Área Botões-->
+                <div class="d-flex justify-content-between mt-5">
+
+                        <!--Botão Voltar-->
+                    <div class="d-flex align-items-start mb-3">
+                        <a href="{{ url_for('modeloIndex')}}">
+                            <button type="button" class="btn btn-custom px-3" id="btn-back">Voltar</button>
+                        </a>
+                    </div>
+                    <!--Botão Continuar-->
+                    <form id="form-continuar" method="POST" action="{{ url_for('novoModeloForm') }}">
+                        <input type="hidden" name="dataset_id" id="dataset_id_selecionado">
+                        <button type="submit" class="btn btn-primary btn-custom px-5">Continuar</button>
+                    </form>
+
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Filtro (agora limitado ao form de filtro apenas)
+        document.getElementById("form-filtro").addEventListener("submit", function (event) {
+            event.preventDefault(); // Apenas previne o submit do formulário de filtro
+
+            let nomeFiltro = document.getElementById("campo1").value.toLowerCase();
+            let dataFiltro = document.getElementById("campo3").value;
+
+            let minExemplos = document.querySelectorAll("[id^=campo4]")[0].value;
+            let maxExemplos = document.querySelectorAll("[id^=campo4]")[1].value;
+
+            let linhas = document.querySelectorAll("tbody tr");
+
+            linhas.forEach(linha => {
+                let nome = linha.cells[1].textContent.toLowerCase();
+                let exemplos = parseInt(linha.cells[3].textContent) || 0;
+                let data = linha.cells[4].textContent.trim();
+
+                let dataFormatada = data.split("-").reverse().join("-");
+
+                let nomeMatch = nome.includes(nomeFiltro) || nomeFiltro === "";
+                let dataMatch = dataFiltro === "" || dataFormatada === dataFiltro;
+                let minMatch = minExemplos === "" || exemplos >= parseInt(minExemplos);
+                let maxMatch = maxExemplos === "" || exemplos <= parseInt(maxExemplos);
+
+                if (nomeMatch && dataMatch && minMatch && maxMatch) {
+                    linha.style.display = "";
+                } else {
+                    linha.style.display = "none";
+                }
+        });
+    });
+
+    // Selecionar dataset
+    document.querySelectorAll(".selecionar").forEach(botao => {
+        botao.addEventListener("click", function () {
+            document.querySelectorAll("tbody tr").forEach(linha => {
+                linha.classList.remove("table-success");
+            });
+
+            let linhaSelecionada = this.closest("tr");
+            linhaSelecionada.classList.add("table-success");
+
+            let idDataset = linhaSelecionada.cells[0].textContent.trim();
+            document.getElementById("dataset_id_selecionado").value = idDataset;
+        });
+    });
+});
+
+    </script>
+
+</body>
+</html>

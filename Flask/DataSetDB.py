@@ -62,6 +62,15 @@ def getDatasetByID(id):
         print(f"Erro ao encontrar dataset por ID: {e}")
         return None
     
+def getTrainDataset(user_id):
+    try:
+        db_search = Dataset.query.filter_by(utilizador_id=user_id, is_treino = True).all()
+        return db_search
+    except Exception as e:
+        db.session.rollback()  
+        print(f"Erro ao encontrar Datasets: {e}")
+        return None
+    
 def remDataset(id):
     try:
         ds = getDatasetByID(id)
