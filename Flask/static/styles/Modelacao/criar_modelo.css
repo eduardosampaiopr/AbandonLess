@@ -1,0 +1,37 @@
+/* static/styles/Modelacao/criar_modelo.css */
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+#main-content {
+    min-height: 100vh;
+}
+
+.icon-size {
+    max-height: 4em;
+    width: auto;
+}
+
+.formulario {
+    background-color: #D9D9D9;
+    border-radius: 10px;
+}
+
+label {
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: #5299E5 !important;
+    border-color: #5299E5 !important;
+}
+
+.form-check-label {
+    font-weight: 500;
+}
+
+.form-check-input:checked {
+    background-color: #5299E5;
+    border-color: #5299E5;
+}

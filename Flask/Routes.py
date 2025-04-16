@@ -48,7 +48,7 @@ def login():
         if session["tipo_utilizador"] == "Administrador":
             return redirect(url_for("adminMain", username = session["user"]))
         else:
-            return redirect(url_for("ConjIndex"))
+            return redirect(url_for("previsaoIndex"))
     return render_template("Login.Html")
 
 
@@ -326,4 +326,27 @@ def modeloIndex():
         allModels = getModels()
         return render_template("Modelacao/Modelacao.html", current_page="Modelacao")
     else: 
+        return redirect(url_for("login"))
+
+@app.route("/Modelacao/NovoModelo", methods = ["POST", "GET"])
+def novoModelo():
+    if "user" in session:
+        return render_template("Modelacao/criar_modelo.html", current_page="Modelacao")
+    else: 
+        return redirect(url_for("login"))
+
+    
+#Módulo de Previsão
+@app.route("/Previsao")
+def previsaoIndex():
+    if "user" in session:
+        return render_template("Previsão/Index.html", current_page="Previsão")
+    else: 
+        return redirect(url_for("login"))
+    
+@app.route("/Previsao/NovaPrevisao", methods = ["POST", "GET"])
+def novaPrev():
+    if "user" in session:
+        return render_template("")
+    else:
         return redirect(url_for("login"))

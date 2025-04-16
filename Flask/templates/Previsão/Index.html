@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/Previsão/index.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <title>AbandonLess</title>
+</head>
+<body>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            {% include 'sidebar.html' %}
+
+            <div class="col p-4 d-flex flex-column min-vh-100" id="main-content">
+                <!--div titulo -->
+                <div class="d-flex align-items-center justify-content-center">
+                    <h1 class="display-1 ">Previsão</h1>
+                    <img src="{{url_for('static', filename='/Imagens/Icons/previsao.png')}}" class="img-fluid icon-size ms-3">
+                </div>
+                
+                <!--Filtro-->
+                <div class="filtro p-4 ">
+                    <form class="row g-3 align-items-end justify-content-center bk-dark">
+                        <div class="col-md-3">
+                            <label for="Algoritmo" class="form-label">Algoritmo</label>
+                            <input type="text" class="form-control" id="campo1" placeholder="Insira o nome do Algoritmo">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="Conjunto de dados" class="form-label">Conjunto de dados</label>
+                            <input type="text" class="form-control" id="campo2" placeholder="Insira o nome do Conjunto">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="Data" class="form-label">Data</label>
+                            <input type="date" class="form-control" id="campo3" placeholder="Selecione uma data">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--tabela-->
+                <div class="table-responsive">
+                    <table class="table table-bordered mt-4 table-fixed">
+                        <thead>
+                            <tr class="first">
+                                <th scope="col">Algoritmo</th>
+                                <th scope="col">Dataset</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-body">
+                            <tr>
+                                <th scope="row">Reg_linearV3.2</th>
+                                <td>Uluf2025</td>
+                                <td>25-03-2025</td>
+                                <td class="lupaimg"><a href="#"><img class="lupa" src="{{ url_for('static', filename= '/Imagens/Icons/lupa.png')}}"> </a></td>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
+                </div>
+                
+               
+
+                <!--Botão Nova Previsão-->
+                <div class="d-flex justify-content-center mt-4">
+                    <div class="novaprev">
+                        <button type="submit" class="btn btn-primary btn-custom px-5 ">Nova Previsão</button>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita o recarregamento da página
+
+        let algoritmoFiltro = document.getElementById("campo1").value.toLowerCase();
+        let datasetFiltro = document.getElementById("campo2").value.toLowerCase();
+        let dataFiltro = document.getElementById("campo3").value; // Formato YYYY-MM-DD
+
+        let linhas = document.querySelectorAll("tbody tr");
+
+        linhas.forEach(linha => {
+            let algoritmo = linha.cells[0].textContent.toLowerCase();
+            let dataset = linha.cells[1].textContent.toLowerCase();
+            let data = linha.cells[2].textContent.trim(); // Formato DD-MM-YYYY
+
+            // Converter data da linha para YYYY-MM-DD
+            let dataSplit = data.split("-");
+            let dataFormatada = `${dataSplit[2]}-${dataSplit[1]}-${dataSplit[0]}`;
+
+            let algoritmoMatch = algoritmo.includes(algoritmoFiltro) || algoritmoFiltro === "";
+            let datasetMatch = dataset.includes(datasetFiltro) || datasetFiltro === "";
+            let dataMatch = dataFiltro === "" || dataFormatada === dataFiltro;
+
+            if (algoritmoMatch && datasetMatch && dataMatch) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    });
+});
+
+    </script>
+
+</body>
+</html>
+

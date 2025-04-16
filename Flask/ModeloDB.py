@@ -17,6 +17,9 @@ class ModeloPreditivo(db.Model):
     dataset_criacao_id = Column(Integer, ForeignKey('dataset.id'))
     data_criacao = Column(DateTime, default=datetime.datetime.utcnow)
     data_atualizacao = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    features_utilizadas = Column(JSON)
+    tipo_modelo = Column(String(50), default="LinearRegression")
+    normalizador_serializado = Column(LargeBinary)
 
     utilizador = relationship('Utilizador', back_populates='modelos')
     dataset_criacao = relationship('Dataset', back_populates='modelos')
@@ -28,5 +31,5 @@ def getModels():
         return db_search
     except Exception as e:
         db.session.rollback()  
-        print(f"Erro ao encontrar Datasets: {e}")
+        print(f"Erro ao encontrar Modelos: {e}")
         return 0
