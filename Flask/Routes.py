@@ -327,6 +327,14 @@ def modeloIndex():
     else: 
         return redirect(url_for("login"))
     
+@app.route("/Modelacao/NovoModelo", methods = ["POST", "GET"])
+def novoModeloDS():
+    if "user" in session:
+        datasets = getTrainDataset(session["id"])
+        return render_template("Modelacao/modelacao_DS.html", datasets = datasets, current_page="Modelacao")
+    else: 
+        return redirect(url_for("login"))
+    
 @app.route("/Modelacao/NovoModelo/Form", methods = ["POST", "GET"])
 def novoModeloForm():
     if "user" in session:
@@ -359,11 +367,22 @@ def novoModeloForm():
     else: 
         return redirect(url_for("login"))
 
-@app.route("/Modelacao/NovoModelo", methods = ["POST", "GET"])
-def novoModeloDS():
+@app.route("/Modelacao/NovoModelo/create", methods = ["POST", "GET"])
+def novoModeloCreate():
     if "user" in session:
-        datasets = getTrainDataset(session["id"])
-        return render_template("Modelacao/modelacao_DS.html", datasets = datasets, current_page="Modelacao")
+        if request.method == "POST":
+            nome = request.form["nome_modelo"]
+            threshold = request.form["threshold"]
+            tipo_teste = request.form["validacao"]
+            colunas_remover = request.form.getlist("colunas_remover")
+            if tipo_teste == "kfold":
+                kfold_n = request.form.get("kfold_n") 
+            else:
+                split_ratio = request.form.get("split_ratio")  
+
+
+
+        return jsonify({"sopa": nome, "threshold": threshold, "tipo_teste": tipo_teste, "colunas_remover": colunas_remover})
     else: 
         return redirect(url_for("login"))
 
