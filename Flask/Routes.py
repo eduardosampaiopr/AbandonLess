@@ -376,11 +376,10 @@ def novoModeloCreate():
             tipo_teste = request.form["validacao"]
             colunas_remover = request.form.getlist("colunas_remover")
             if tipo_teste == "kfold":
-                kfold_n = request.form.get("kfold_n") 
+                kfold_n = request.form.get("kfold_n")
+                 
             else:
                 split_ratio = request.form.get("split_ratio")  
-
-
 
         return jsonify({"sopa": nome, "threshold": threshold, "tipo_teste": tipo_teste, "colunas_remover": colunas_remover})
     else: 
