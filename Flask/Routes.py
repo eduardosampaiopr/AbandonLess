@@ -363,7 +363,7 @@ def novoModeloForm():
         else:
             return "Dataset não encontrado", 404
 
-        return render_template("Modelacao/criar_modelo.html", colunas_dataset = columns, current_page="Modelacao")
+        return render_template("Modelacao/criar_modelo.html", ds_id = dataset_id, colunas_dataset = columns, current_page="Modelacao")
     else: 
         return redirect(url_for("login"))
 
@@ -375,13 +375,28 @@ def novoModeloCreate():
             threshold = request.form["threshold"]
             tipo_teste = request.form["validacao"]
             colunas_remover = request.form.getlist("colunas_remover")
+            dataset_id = request.form["dataset_id"]
+
+            ds = getDatasetByID(dataset_id)
+
+            threshold = float(threshold)
+
             if tipo_teste == "kfold":
                 kfold_n = request.form.get("kfold_n")
-                 
+                kfold_n = int(kfold_n) #if kfold_n else 5
+                modelo = createModelLinearRegkold(ds.caminho, nome, threshold, kfold_n, colunas_remover
+                                                  , session["id"], ds.id )
+    
             else:
-                split_ratio = request.form.get("split_ratio")  
+                split_ratio = request.form.get("split_ratio") 
+                split_ratio = float(split_ratio) if split_ratio else 0.8
+                modelo = createModelLinearRegTrainTestSplit(ds.caminho, nome, threshold, split_ratio, colunas_remover
+                                                  , session["id"], ds.id ) 
+            
+            if addModels(modelo):
+                return jsonify({"sopa": nome, "threshold": threshold, "tipo_teste": tipo_teste, "colunas_remover": colunas_remover})
 
-        return jsonify({"sopa": nome, "threshold": threshold, "tipo_teste": tipo_teste, "colunas_remover": colunas_remover})
+            return ("Gaita")
     else: 
         return redirect(url_for("login"))
 

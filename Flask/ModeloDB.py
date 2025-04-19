@@ -49,6 +49,7 @@ def addModels(modelo):
     try:
         db.session.add(modelo)
         db.session.commit()
+        print(f"Modelo {modelo.nome} guardado com sucesso!")
         return 1
     except Exception as e:
         db.session.rollback()
@@ -101,7 +102,7 @@ def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id
 
     # Plotar a matriz de confusão final
     plt.figure(figsize=(6, 4))
-    sns.heatmap(matriz_confusao_acumulada, annot=True, fmt='d', cmap="Blues", xticklabels=["Graduate (0)", "Dropout (1)"], yticklabels=["Graduate (0)", "Dropout (1)"])
+    sns.heatmap(matriz_confusao_acumulada.astype(int), annot=True, fmt='d', cmap="Blues", xticklabels=["Graduate (0)", "Dropout (1)"], yticklabels=["Graduate (0)", "Dropout (1)"])
     plt.xlabel("Previsto")
     plt.ylabel("Real")
     plt.title("Matriz de Confusão - Cross Validation")
@@ -183,7 +184,7 @@ def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, co
 
     # Plotar a matriz de confusão final
     plt.figure(figsize=(6, 4))
-    sns.heatmap(matriz_confusao, annot=True, fmt='d', cmap="Blues", xticklabels=["Graduate (0)", "Dropout (1)"], yticklabels=["Graduate (0)", "Dropout (1)"])
+    sns.heatmap(matriz_confusao.astype(int), annot=True, fmt='d', cmap="Blues", xticklabels=["Graduate (0)", "Dropout (1)"], yticklabels=["Graduate (0)", "Dropout (1)"])
     plt.xlabel("Previsto")
     plt.ylabel("Real")
     plt.title("Matriz de Confusão - Cross Validation")
