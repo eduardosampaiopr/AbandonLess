@@ -49,13 +49,24 @@
                         <thead>
                             <tr class="first">
                                 <th scope="col">Algoritmo</th>
-                                <th scope="col">Criador</th>
+                                <th scope="col">Tipo de Modelo</th>
                                 <th scope="col">Data de Criação</th>
                                 <th scope="col">Métricas</th>
                             </tr>
                         </thead>
                         <tbody class="table-body">
-                            
+                            {%for m in modelos%}
+                            <tr>
+                                <td class="font-weight-bold">{{m.nome}}</td>
+                                <td>{{m.tipo_modelo}}</td>
+                                <td>{{m.data_criacao}}</td>
+                                <td class="text-center" >
+                                    <a href="{{url_for('verModelo', modelo_id=m.id)}}">
+                                        <img src="{{url_for('static', filename='/Imagens/icons/lupa.png')}}" class="icon">
+                                    </a>
+                                </td>
+                            </tr>
+                            {%endfor%}
                         </tbody>
                     </table>
                 </div>

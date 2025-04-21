@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os, pandas as pd
 from io import BytesIO, TextIOWrapper
 
+import base64
+
 from UtilizadorDB import *
 from DataSetDB import *
 from ModeloDB import *
@@ -322,8 +324,8 @@ def removeDataset(dataset_id):
 @app.route("/Modelacao")
 def modeloIndex():
     if "user" in session:
-        allModels = getModels()
-        return render_template("Modelacao/Modelacao.html", current_page="Modelacao")
+        allModels = getModels(session["id"])
+        return render_template("Modelacao/Modelacao.html", modelos = allModels, current_page="Modelacao")
     else: 
         return redirect(url_for("login"))
     
@@ -331,7 +333,7 @@ def modeloIndex():
 def novoModeloDS():
     if "user" in session:
         datasets = getTrainDataset(session["id"])
-        return render_template("Modelacao/modelacao_DS.html", datasets = datasets, current_page="Modelacao")
+        return render_template("Modelacao/modelacao_DS.html", datasets = datasets)
     else: 
         return redirect(url_for("login"))
     
@@ -394,11 +396,36 @@ def novoModeloCreate():
                                                   , session["id"], ds.id ) 
             
             if addModels(modelo):
-                return jsonify({"sopa": nome, "threshold": threshold, "tipo_teste": tipo_teste, "colunas_remover": colunas_remover})
-
+                return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
+                                hiper_parametros=json.loads(modelo.hiper_parametros),
+                                imagem_matriz_confusao=base64.b64encode(modelo.imagem_matriz_confusao).decode('utf-8'))
             return ("Gaita")
     else: 
         return redirect(url_for("login"))
+    
+@app.route("/Modelacao/<int:modelo_id>")
+def verModelo(modelo_id):
+    if "user" in session:
+        session["modelo_id"] = modelo_id
+        modelo = getModelsByID(modelo_id)
+        if modelo:
+            return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
+                                hiper_parametros=json.loads(modelo.hiper_parametros),
+                                imagem_matriz_confusao=base64.b64encode(modelo.imagem_matriz_confusao).decode('utf-8'), current_page="Modelacao2")
+        return ("Gaita")
+    else: 
+        return redirect(url_for("login"))
+    
+@app.route("/removerModelo/<int:modelo_id>", methods=["POST"])
+def removeModel(modelo_id):
+    if "user" in session:
+        print(f"ID do modelo: {modelo_id}")
+        if remModel(modelo_id):
+            session.pop("modelo_id", None)
+            return jsonify({"success": True, "message": "Modelo removido com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Modelo não encontrado."})
+    return jsonify({"success": False, "message": "É preciso estar logado."})
 
 
     

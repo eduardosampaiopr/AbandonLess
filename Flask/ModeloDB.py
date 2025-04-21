@@ -36,13 +36,33 @@ class ModeloPreditivo(db.Model):
     dataset_criacao = relationship('Dataset', back_populates='modelos')
     previsoes = relationship('Previsao', back_populates='modelo')
 
-def getModels():
+def getModels(user_id):
     try:
-        db_search = ModeloPreditivo.query.all() #filtrar por id de utilizador????
+        db_search = ModeloPreditivo.query.filter_by(utilizador_id = user_id).all()
         return db_search
     except Exception as e:
         db.session.rollback()  
         print(f"Erro ao encontrar Modelos: {e}")
+        return 0
+    
+def getModelsByID(id):
+    try:
+        db_search = ModeloPreditivo.query.filter_by(id = id).first() 
+        return db_search
+    except Exception as e:
+        db.session.rollback()  
+        print(f"Erro ao encontrar Modelo: {e}")
+        return 0
+    
+def remModel(id):
+    try:
+        db_search = ModeloPreditivo.query.filter_by(id = id).first() 
+        db.session.delete(db_search)
+        db.session.commit()
+        return 1
+    except Exception as e:
+        db.session.rollback()  
+        print(f"Erro ao remover Modelo: {e}")
         return 0
     
 def addModels(modelo):

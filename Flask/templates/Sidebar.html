@@ -45,6 +45,18 @@
                         </a>
                     </li>
                 </ul>
+                {% if session["modelo_id"] %}
+                <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="modelacao-menu2">
+                    <li>
+                        <a href="#" 
+                        class="submenu-item link-eliminar" 
+                        style="font-size: 0.9rem;"
+                        onclick="event.preventDefault(); confirmDeleteModel({{ session['modelo_id'] }});">
+                            <span>Eliminar Modelo</span>
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
             </li>
             {% endif %}
             <li class="nav-item">
@@ -95,6 +107,9 @@
             } else if (currentPage === "Modelacao") {
                 document.getElementById("modelacao-menu").style.display = "block";
                 document.getElementById("link-modelacao").classList.add("active");
+            }else if (currentPage === "Modelacao2") {
+                document.getElementById("modelacao-menu2").style.display = "block";
+                document.getElementById("link-modelacao").classList.add("active");
             } else if (currentPage === "ConjuntosDeDados") { 
                 document.getElementById("conjuntos-menu").style.display = "block";
                 document.getElementById("link-conjuntos").classList.add("active");
@@ -123,6 +138,26 @@
                 }
             }
         </script>
+
+        <!--Script Eliminar Modelo-->
+        <script>
+            function confirmDeleteModel(modeloId) {
+                console.log("ID recebido:", modeloId);
+                modeloId = parseInt(modeloId);
+                if (confirm("Deseja eliminar este Modelo?")) {
+                    fetch(`/removerModelo/${modeloId}`, { method: "POST" })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            if (data.success) {
+                                window.location.href = "{{ url_for('modeloIndex') }}";
+                            }
+                        })
+                        .catch(error => console.error("Erro:", error));
+                }
+            }
+        </script>
+
 
 </body>
 </html>

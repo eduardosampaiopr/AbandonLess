@@ -51,10 +51,7 @@
                     <h2 class="display-1 ">Modelo</h2>
                 </div>
 
-                <!--Botão Voltar-->
-                <div class="d-flex align-items-start mb-3">
-                    <button type="submit" class="btn btn-custom px-3" id="btn-back">Voltar</button>
-                </div>
+                
 
                 <!--Filtro-->
                 <div class="filtro p-4 d-flex align-items-center">
@@ -81,15 +78,11 @@
                         <table class="table table-bordered mt-5">
                             <thead>
                                 <tr>
-                                    <th>Métrico</th>
-                                    <th>Avaliação</th>
+                                    <th>Métrica</th>
+                                    <th>Pontuação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">Tempo de Execução</th>
-                                    <td>6.3 sec</td>   
-                                </tr>
                                 <tr >
                                     <th scope="row">Precisão</th>
                                     <td>0.75</td>
@@ -99,15 +92,11 @@
                                     <td>0.8</td>   
                                 </tr>
                                 <tr>
-                                    <th scope="row">AUC-ROC</th>
-                                    <td>0.75</td>
-                                </tr>
-                                <tr>
                                     <th scope="row">Recall</th>
                                     <td>0.90</td>   
                                 </tr>
                                 <tr>
-                                    <th scope="row">Precisão</th>
+                                    <th scope="row">F1-score</th>
                                     <td>0.75</td>
                                 </tr>
 
@@ -125,28 +114,30 @@
                     <table class="table table-bordered mt-5">
                         <thead>
                             <tr>
-                                <th>Fase de Modelação</th>
-                                <th>Conjunto de dados</th>
+                                <th>Hiperparâmetros</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">Treino*</th>
-                                <td>DSFLusofona.csv</td>   
+                                <th scope="row">Tipo de Modelo</th>
+                                <td></td>   
                             </tr>
                             <tr>
-                                <th scope="row">Avaliação*</th>
-                                <td>DSFLusofona.csv</td>
-                                
+                                <th scope="row">Threshold</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Número de Folds / Train Split Ratio</th>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="d-flex justify-content-center">*Foi utilizado CrossValidation</div>
-               
-                
-                
+                <!--Botão Voltar-->
+                <div class="d-flex align-items-start mb-3">
+                    <button type="submit" class="btn btn-custom px-3" id="btn-back">Voltar</button>
+                </div>
                 
             
             </div>
