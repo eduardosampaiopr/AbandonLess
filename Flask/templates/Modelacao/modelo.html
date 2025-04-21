@@ -24,14 +24,10 @@
                 </div>
 
                 <!-- Filtro / Header -->
-                <div class="filtro p-4 d-flex align-items-center">
-                    <div class="ms-4 me-auto">
+                <div class="filtro p-4 d-flex align-items-center ">
+                    <div class="ms-4 me-auto nowrap">
+                        <h1>Nome:</h1>
                         <h1 style="text-decoration: underline;">{{ modelo.nome }}</h1>
-                    </div>
-                    
-                    <div class="d-flex align-items-center me-auto">
-                        <h1>Criador:</h1>
-                        <h1 class="ms-2" style="text-decoration: underline;">{{ modelo.utilizador.nome }}</h1>
                     </div>
 
                     <div class="d-flex align-items-start justify-content-center">
@@ -96,10 +92,18 @@
                                 <th scope="row">Threshold</th>
                                 <td>{{ hiper_parametros.intervalo_admissao }}</td>
                             </tr>
+                            {% if hiper_parametros["num_folds"]%}
                             <tr>
-                                <th scope="row">Número de Folds</th>
-                                <td>{{ hiper_parametros.num_folds }}</td>
+                                    <th scope="row">Número de Folds</th>
+                                    <td>{{ hiper_parametros["num_folds"] }}</td>
                             </tr>
+                            {%endif%}
+                            {% if hiper_parametros["split_ratio"]%}
+                            <tr>
+                                <th scope="row">Rácio de Treino</th>
+                                <td>{{ hiper_parametros["split_ratio"]}}</td>
+                            </tr>
+                            {%endif%}
                         </tbody>
                     </table>
                 </div>
