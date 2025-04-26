@@ -1,36 +1,3 @@
-.nav-item{
-    background-color: #EBEBEB;
-    margin: 20px;
-    text-align: center;
-    border-radius: 10px;
-    font-size:x-large;
-}
-.nav-link.active {
-    background-color: #C8C5C5 !important; /* Fundo laranja */
-    color: black !important; 
-    border-radius: 10px;
-}
-.nav-item:hover{
-    background-color: #8d8d8d;
-}
-
-.col-auto{
-    background-color: #5299E5;
-    min-width: 25%;
-    align-items: center;
-}
-
-.LogOut {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;  
-    padding-left: 10px; 
-    font-size:larger;
-}
-
-.iconlog{
-    max-height: 1.5em;
-}
 
 body {
     font-family: 'Montserrat';
@@ -58,10 +25,7 @@ body {
     border-color: #5299E5;
 }
 
-.novaprev{
-    position: fixed;
-    bottom: 5em;      
-}
+
 
 .table{
     border-collapse: collapse;
@@ -84,4 +48,8 @@ body {
 .icon{
     max-height: 2em;
     align-self: center;
+}
+
+.titulo{
+    font-size: 2.5em ;
 }
