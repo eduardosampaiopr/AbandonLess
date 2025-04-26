@@ -51,7 +51,8 @@
                                 <th scope="col">Algoritmo</th>
                                 <th scope="col">Tipo de Modelo</th>
                                 <th scope="col">Data de Criação</th>
-                                <th scope="col">Métricas</th>
+                                <th scope="col">Autor</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody class="table-body">
@@ -60,6 +61,7 @@
                                 <td class="font-weight-bold">{{m.nome}}</td>
                                 <td>{{m.tipo_modelo}}</td>
                                 <td>{{m.data_criacao}}</td>
+                                <td>{{m.utilizador.nome}}</td>
                                 <td class="text-center" >
                                     <a href="{{url_for('verModelo', modelo_id=m.id)}}">
                                         <img src="{{url_for('static', filename='/Imagens/icons/lupa.png')}}" class="icon">

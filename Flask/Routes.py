@@ -256,7 +256,6 @@ def NovoDataset():
         return redirect(url_for("login"))
 
 
-
 @app.route("/ConjuntosDeDados/<int:dataset_id>")
 def verDataset(dataset_id):
     if "user" in session:
@@ -324,111 +323,134 @@ def removeDataset(dataset_id):
 @app.route("/Modelacao")
 def modeloIndex():
     if "user" in session:
-        allModels = getModels(session["id"])
-        return render_template("Modelacao/Modelacao.html", modelos = allModels, current_page="Modelacao")
+        if session["tipo_utilizador"] == "Data Scientist":
+            allModels = getModels(session["id"])
+            return render_template("Modelacao/Modelacao.html", modelos = allModels, current_page="Modelacao")
+        else:
+            flash("Não tens permissão para aceder à página de modelação.", "danger")
+            return redirect(url_for("previsaoIndex"))  
     else: 
         return redirect(url_for("login"))
     
 @app.route("/Modelacao/NovoModelo", methods = ["POST", "GET"])
 def novoModeloDS():
     if "user" in session:
-        datasets = getTrainDataset(session["id"])
-        return render_template("Modelacao/modelacao_DS.html", datasets = datasets)
+        if session["tipo_utilizador"] == "Data Scientist":
+            datasets = getTrainDataset(session["id"])
+            return render_template("Modelacao/modelacao_DS.html", datasets = datasets)
+        else:
+            flash("Não tens permissão para aceder à página de modelação.", "danger")
+            return redirect(url_for("previsaoIndex"))  
     else: 
         return redirect(url_for("login"))
     
 @app.route("/Modelacao/NovoModelo/Form", methods = ["POST", "GET"])
 def novoModeloForm():
     if "user" in session:
-        dataset_id = request.form.get("dataset_id")
-        if not dataset_id:
-            flash("Nenhum dataset selecionado.", "danger")
-            return redirect(url_for("novoModeloDS"))
-    
-        dataset = getDatasetByID(dataset_id)
+        if session["tipo_utilizador"] == "Data Scientist":
+            dataset_id = request.form.get("dataset_id")
+            if not dataset_id:
+                flash("Nenhum dataset selecionado.", "danger")
+                return redirect(url_for("novoModeloDS"))
+        
+            dataset = getDatasetByID(dataset_id)
 
-        if dataset:
-            try:
-                
-                with open(dataset.caminho, "rb") as f:
-                    file_bytes = f.read()
-                    buffer = BytesIO(file_bytes)
-                    delimitador = obter_delimitador(buffer)
+            if dataset:
+                try:
+                    
+                    with open(dataset.caminho, "rb") as f:
+                        file_bytes = f.read()
+                        buffer = BytesIO(file_bytes)
+                        delimitador = obter_delimitador(buffer)
 
-                buffer.seek(0)
-                df = pd.read_csv(buffer, delimiter=delimitador)
-                columns = df.columns.tolist()
+                    buffer.seek(0)
+                    df = pd.read_csv(buffer, delimiter=delimitador)
+                    columns = df.columns.tolist()
 
-            except Exception as e:
-                flash(f"Erro ao processar o ficheiro: {e}", "error")
-                return redirect(request.url)
+                except Exception as e:
+                    flash(f"Erro ao processar o ficheiro: {e}", "error")
+                    return redirect(request.url)
+            else:
+                return "Dataset não encontrado", 404
+
+            return render_template("Modelacao/criar_modelo.html", ds_id = dataset_id, colunas_dataset = columns, current_page="Modelacao")
         else:
-            return "Dataset não encontrado", 404
-
-        return render_template("Modelacao/criar_modelo.html", ds_id = dataset_id, colunas_dataset = columns, current_page="Modelacao")
+            flash("Não tens permissão para aceder à página de modelação.", "danger")
+            return redirect(url_for("previsaoIndex"))  
     else: 
         return redirect(url_for("login"))
 
 @app.route("/Modelacao/NovoModelo/create", methods = ["POST", "GET"])
 def novoModeloCreate():
     if "user" in session:
-        if request.method == "POST":
-            nome = request.form["nome_modelo"]
-            threshold = request.form["threshold"]
-            tipo_teste = request.form["validacao"]
-            colunas_remover = request.form.getlist("colunas_remover")
-            dataset_id = request.form["dataset_id"]
+        if session["tipo_utilizador"] == "Data Scientist":
+            if request.method == "POST":
+                nome = request.form["nome_modelo"]
+                threshold = request.form["threshold"]
+                tipo_teste = request.form["validacao"]
+                colunas_remover = request.form.getlist("colunas_remover")
+                dataset_id = request.form["dataset_id"]
 
-            ds = getDatasetByID(dataset_id)
+                ds = getDatasetByID(dataset_id)
 
-            threshold = float(threshold)
+                threshold = float(threshold)
 
-            if tipo_teste == "kfold":
-                kfold_n = request.form.get("kfold_n")
-                kfold_n = int(kfold_n) #if kfold_n else 5
-                modelo = createModelLinearRegkold(ds.caminho, nome, threshold, kfold_n, colunas_remover
-                                                  , session["id"], ds.id )
-    
-            else:
-                split_ratio = request.form.get("split_ratio") 
-                split_ratio = float(split_ratio) if split_ratio else 0.8
-                modelo = createModelLinearRegTrainTestSplit(ds.caminho, nome, threshold, split_ratio, colunas_remover
-                                                  , session["id"], ds.id ) 
-            
-            if addModels(modelo):
-                return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
-                                hiper_parametros=json.loads(modelo.hiper_parametros),
-                                imagem_matriz_confusao=base64.b64encode(modelo.imagem_matriz_confusao).decode('utf-8'))
-            return ("Gaita")
+                if tipo_teste == "kfold":
+                    kfold_n = request.form.get("kfold_n")
+                    kfold_n = int(kfold_n) #if kfold_n else 5
+                    modelo = createModelLinearRegkold(ds.caminho, nome, threshold, kfold_n, colunas_remover
+                                                    , session["id"], ds.id )
+        
+                else:
+                    split_ratio = request.form.get("split_ratio") 
+                    split_ratio = float(split_ratio) if split_ratio else 0.8
+                    modelo = createModelLinearRegTrainTestSplit(ds.caminho, nome, threshold, split_ratio, colunas_remover
+                                                    , session["id"], ds.id ) 
+                
+                if addModels(modelo):
+                    return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
+                                    hiper_parametros=json.loads(modelo.hiper_parametros),
+                                    imagem_matriz_confusao=base64.b64encode(modelo.imagem_matriz_confusao).decode('utf-8'))
+                return ("Erro ao criar modelo")
+        else:
+             flash("Não tens permissão para aceder à página de modelação.", "danger")
+             return redirect(url_for("previsaoIndex"))   
     else: 
         return redirect(url_for("login"))
     
 @app.route("/Modelacao/<int:modelo_id>")
 def verModelo(modelo_id):
     if "user" in session:
-        session["modelo_id"] = modelo_id
-        modelo = getModelsByID(modelo_id)
-        if modelo:
-            return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
-                                hiper_parametros=json.loads(modelo.hiper_parametros),
-                                imagem_matriz_confusao=base64.b64encode(modelo.imagem_matriz_confusao).decode('utf-8'), current_page="Modelacao2")
-        return ("Gaita")
+        if session["tipo_utilizador"] == "Data Scientist":
+            session["modelo_id"] = modelo_id
+            modelo = getModelsByID(modelo_id)
+            if modelo:
+                return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
+                                    hiper_parametros=json.loads(modelo.hiper_parametros),
+                                    imagem_matriz_confusao=base64.b64encode(modelo.imagem_matriz_confusao).decode('utf-8'), current_page="Modelacao2")
+            return ("Gaita")
+        else:
+            flash("Não tens permissão para aceder à página de modelação.", "danger")
+            return redirect(url_for("previsaoIndex"))  
     else: 
         return redirect(url_for("login"))
     
 @app.route("/removerModelo/<int:modelo_id>", methods=["POST"])
 def removeModel(modelo_id):
     if "user" in session:
-        print(f"ID do modelo: {modelo_id}")
-        if remModel(modelo_id):
-            session.pop("modelo_id", None)
-            return jsonify({"success": True, "message": "Modelo removido com sucesso!"})
+        if session["tipo_utilizador"] == "Data Scientist":
+            print(f"ID do modelo: {modelo_id}")
+            if remModel(modelo_id):
+                session.pop("modelo_id", None)
+                return jsonify({"success": True, "message": "Modelo removido com sucesso!"})
+            else:
+                return jsonify({"success": False, "message": "Modelo não encontrado."})
         else:
-            return jsonify({"success": False, "message": "Modelo não encontrado."})
+            flash("Não tens permissão para aceder à página de modelação.", "danger")
+            return redirect(url_for("previsaoIndex"))  
     return jsonify({"success": False, "message": "É preciso estar logado."})
 
 
-    
 #Módulo de Previsão
 @app.route("/Previsao")
 def previsaoIndex():

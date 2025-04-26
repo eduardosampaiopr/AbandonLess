@@ -39,7 +39,7 @@ class ModeloPreditivo(db.Model):
 
 def getModels(user_id):
     try:
-        db_search = ModeloPreditivo.query.filter_by(utilizador_id = user_id).all()
+        db_search = ModeloPreditivo.query.all()
         return db_search
     except Exception as e:
         db.session.rollback()  
