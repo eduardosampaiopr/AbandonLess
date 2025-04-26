@@ -15,6 +15,7 @@ import pickle
 import io
 import json
 
+from DataSetDB import obter_delimitador
 class ModeloPreditivo(db.Model):
     __tablename__ = 'modelo_preditivo'
     
@@ -77,7 +78,11 @@ def addModels(modelo):
         return 0
     
 def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id, ds_id):
-    df = pd.read_csv(ds_path)
+
+    with open(ds_path, 'rb') as buffer:
+        delimitador = obter_delimitador(buffer)
+
+    df = pd.read_csv(ds_path, delimiter = delimitador)
 
     # Modelos, feature e váriaveis objetivo
     x = df.drop(columns=['Target'] + col_rem)
@@ -171,7 +176,10 @@ def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id
 
 
 def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, col_rem, user_id, ds_id):
-    df = pd.read_csv(ds_path)
+    with open(ds_path, 'rb') as buffer:
+        delimitador = obter_delimitador(buffer)
+
+    df = pd.read_csv(ds_path, delimiter = delimitador)
 
     # Modelos, feature e váriaveis objetivo
     x = df.drop(columns=['Target'] + col_rem)
