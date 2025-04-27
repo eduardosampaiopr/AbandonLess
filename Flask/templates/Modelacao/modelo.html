@@ -20,21 +20,23 @@
 
                 <!-- Título -->
                 <div class="d-flex align-items-center justify-content-center">
-                    <h2 class="display-1">Modelo</h2>
+                    <h2 class="display-1 titulo">Modelo</h2>
                 </div>
 
-                <!-- Filtro / Header -->
-                <div class="filtro p-4 d-flex align-items-center ">
-                    <div class="ms-4 me-auto nowrap">
-                        <h1>Nome:</h1>
-                        <h1 style="text-decoration: underline;">{{ modelo.nome }}</h1>
+                <!-- Header -->
+                <div class="filtro p-4 d-flex justify-content-between flex-wrap">
+                    <div class="info-group d-flex align-items-center">
+                        <label for="Nome" class="form-label mb-0 me-2">Nome:</label>
+                        <div class="info-box">{{ modelo.nome }}</div>
                     </div>
 
-                    <div class="d-flex align-items-start justify-content-center">
-                        <h1>Data de Criação:</h1>
-                        <h1 class="ms-2" style="text-decoration: underline;">{{ modelo.data_criacao.strftime('%d-%m-%Y') }}</h1>
+                    <div class="info-group d-flex align-items-center">
+                        <label for="Data" class="form-label mb-0 me-2">Data de Criação:</label>
+                        <div class="info-box">{{ modelo.data_criacao.strftime('%d-%m-%Y') }}</div>
                     </div>
                 </div>
+
+
 
                 <!-- Métricas e Gráfico -->
                 <div class="d-flex align-items-center justify-content-between">

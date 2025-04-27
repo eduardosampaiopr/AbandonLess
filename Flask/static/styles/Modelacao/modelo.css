@@ -92,3 +92,30 @@ th{
     text-align: center;
 }
 
+.titulo{
+    font-size: 3.5em ;
+}
+
+.info-group {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.info-group label {
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.info-box {
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.3em 0.6em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-weight: 500;
+    font-size: 0.95em;
+    white-space: nowrap;
+    display: inline-block;
+    width: auto;
+}
