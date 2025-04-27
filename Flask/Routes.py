@@ -235,10 +235,25 @@ def NovoDataset():
                     if df['Target'].nunique() > 2:
                         flash("A coluna 'Target' tem mais de 2 valores distintos. O sistema só aceita variáveis objetivo binárias.", "danger")
                         return redirect(request.url)
+                    
+                    #Separa a coluna 'Target' para não ser afetada pelo One Hot Encoding
+                    target_col = df['Target']
+                    df.drop(columns=['Target'], inplace=True)
                 else:
                     is_treino = False
+                    target_col = None
+
+                # Verifica One Hot Encoding
+                if checkOneHotEncoding(BytesIO(file_bytes), delimitador) == 0:
+                    flash("O ficheiro não está preprarado uma vez que não usa One Hot Enconding. Iremos aplicá-lo automáticamente ", "warning")
+                    buffer.seek(0)
+                    df = pd.get_dummies(df, drop_first=True, dtype=int)
                     
                 num_registos = df.shape[0]  # Número de linhas após remoção dos NaN
+
+                #Volta a inserir a coluna 'Target' não afetada pelo one Hot Encoding, caso esta exista
+                if target_col is not None:
+                    df['Target'] = target_col
 
                 # Guarda o ficheiro no sistema de ficheiros
                 with open(file_path, 'wb') as f_out:
@@ -293,6 +308,7 @@ def verDataset(dataset_id):
                     num_reg=dataset.num_registos,
                     prop = dataset.is_treino,
                     dataset_id=dataset.id,
+                    is_treino=dataset.is_treino,
                     header=header,
                     dados=df.values,
                     page=page,

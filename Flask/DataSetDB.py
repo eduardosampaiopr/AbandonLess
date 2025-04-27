@@ -114,7 +114,6 @@ def obter_delimitador(buffer):
         print(f"[Sniffer] Delimitador detetado: '{dialect.delimiter}'")
         return dialect.delimiter
     except csv.Error:
-        # Fallback simples baseado em contagem
         print("[Sniffer] Erro ao detetar delimitador. Análise manual em curso...")
         if sample.count(';') > sample.count(','):
             print("[Heurística] Delimitador escolhido: ';'")
@@ -123,4 +122,15 @@ def obter_delimitador(buffer):
             print("[Heurística] Delimitador escolhido: ','")
             return ','
 
+def checkOneHotEncoding(buffer, delimiter):
+    buffer.seek(0)
+    try:
+        df = pd.read_csv(buffer, delimiter=delimiter)
+        for c in df.columns:
+            if df[c].dtype == 'object' or pd.api.types.is_categorical_dtype(df[c]):
+                return 0
+        return 1
+    except Exception as e:
+        print(f"Erro ao verificar One Hot Encoding: {e}")
+        return 0
 
