@@ -91,6 +91,46 @@
             <a href="{{ url_for('logout') }}" class="text-black">LogOut</a>
         </div>
     </div>   
+
+    <!-- Modal de Confirmação de Conjunto de Dados -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          De certeza que deseja eliminar este conjunto de dados? Esta ação não pode ser desfeita.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação de Eliminação de Modelo -->
+<div class="modal fade" id="confirmDeleteModelModal" tabindex="-1" aria-labelledby="confirmDeleteModelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModelModalLabel">Confirmar Eliminação do Modelo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          De certeza que deseja eliminar este modelo? Esta ação não pode ser desfeita.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteModelButton">Eliminar</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+  
     
     <!--Script Para controlar os submenos de acordo com a página atual-->
     <script>
@@ -122,41 +162,62 @@
 
         <!--Script Eliminar-->
         <script>
-            function confirmDelete(datasetId) {
+        let datasetIdParaEliminar = null;    
+        function confirmDelete(datasetId) {
                 console.log("ID recebido:", datasetId);
-                datasetId = parseInt(datasetId);
-                if (confirm("Deseja eliminar este dataset?")) {
-                    fetch(`/removerConjuntodeDados/${datasetId}`, { method: "POST" })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert(data.message);
-                            if (data.success) {
-                                window.location.href = "{{ url_for('ConjIndex') }}";
-                            }
-                        })
-                        .catch(error => console.error("Erro:", error));
-                }
+                datasetIdParaEliminar = datasetId; 
+
+                const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                modal.show();
             }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const confirmButton = document.getElementById('confirmDeleteButton');
+                confirmButton.addEventListener('click', function() {
+                    if (datasetIdParaEliminar !== null) {
+                        fetch(`/removerConjuntodeDados/${datasetIdParaEliminar}`, { method: "POST" })
+                            .then(response => response.json())
+                            .then(data => {
+                                
+                                if (data.success) {
+                                    window.location.href = "{{ url_for('ConjIndex') }}"; 
+                                }
+                            })
+                            .catch(error => console.error("Erro:", error));
+                    }
+                });
+            });
         </script>
 
         <!--Script Eliminar Modelo-->
         <script>
+            let modeloIdParaEliminar = null;
+
             function confirmDeleteModel(modeloId) {
-                console.log("ID recebido:", modeloId);
-                modeloId = parseInt(modeloId);
-                if (confirm("Deseja eliminar este Modelo?")) {
-                    fetch(`/removerModelo/${modeloId}`, { method: "POST" })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert(data.message);
-                            if (data.success) {
-                                window.location.href = "{{ url_for('modeloIndex') }}";
-                            }
-                        })
-                        .catch(error => console.error("Erro:", error));
-                }
+                console.log("ID do Modelo recebido:", modeloId);
+                modeloIdParaEliminar = modeloId;
+
+                const modalModel = new bootstrap.Modal(document.getElementById('confirmDeleteModelModal'));
+                modalModel.show();
             }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const confirmModelButton = document.getElementById('confirmDeleteModelButton');
+                confirmModelButton.addEventListener('click', function() {
+                    if (modeloIdParaEliminar !== null) {
+                        fetch(`/removerModelo/${modeloIdParaEliminar}`, { method: "POST" })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.location.href = "{{ url_for('modeloIndex') }}"; 
+                                }
+                            })
+                            .catch(error => console.error("Erro ao eliminar modelo:", error));
+                    }
+                });
+            });
         </script>
+
 
 
 </body>
