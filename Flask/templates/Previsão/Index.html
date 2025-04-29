@@ -70,26 +70,23 @@
                             </tr>
                         </thead>
                         <tbody class="table-body">
+                            {%for a in algoritmos%}
                             <tr>
-                                <th scope="row">Reg_linearV3.2</th>
-                                <td>Uluf2025</td>
-                                <td>25-03-2025</td>
-                                <td class="lupaimg"><a href="#"><img class="lupa" src="{{ url_for('static', filename= '/Imagens/Icons/lupa.png')}}"> </a></td>
+                                <th scope="row">{{a.id}}</th>
+                                <td>{{a.dataset_execucao_id.nome}}</td>
+                                <td>{{a.data_criacao}}</td>
+                                <td class="lupaimg">
+                                    <a href="#">
+                                        <img class="lupa" src="{{ url_for('static', filename= '/Imagens/Icons/lupa.png')}}">
+                                    </a>
+                                </td>
                             </tr>
+                            {%endfor%}
                            
                         </tbody>
                     </table>
                 </div>
-                
-               
-
-                <!--Botão Nova Previsão-->
-                <div class="d-flex justify-content-center mt-4">
-                    <div class="novaprev">
-                        <button type="submit" class="btn btn-primary btn-custom px-5 ">Nova Previsão</button>
-                    </div>
-                </div>
-            
+                        
             </div>
         </div>
     </div>
