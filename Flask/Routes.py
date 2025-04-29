@@ -499,6 +499,18 @@ def novaPrevModel():
             flash("Não foram encontrados modelos compatíveis com o dataset selecionado.", "warning")
             return redirect(url_for("novaPrevDS"))
         
-        return render_template("Previsão/previsao_DS.html", current_page="Previsão", modelos = models )
+        return render_template("Previsão/previsao_model.html", current_page="Previsão", modelos = models, dataset_id = dataset_id )
     else:
+        return redirect(url_for("login"))
+    
+@app.route("/Previsao/NovaPrevisaoModel/Criar<int:dataset_id>", methods = ["POST", "GET"])
+def novaPrevCreate(dataset_id):
+    if "user" in session:
+        modelo_id = request.form.get("model_id")
+        print(f"ID: {modelo_id}")
+        
+        if makePrev(modelo_id, dataset_id, session["id"]):
+            return("Sucesso")
+
+    else: 
         return redirect(url_for("login"))

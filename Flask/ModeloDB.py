@@ -280,7 +280,7 @@ def prever(self, dataset_path):
         buffer = io.BytesIO(file_bytes)
         delimitador = obter_delimitador(buffer)
 
-    df = pd.read_csv(io.BytesIO(file_bytes), delimeter = delimitador)
+    df = pd.read_csv(io.BytesIO(file_bytes), delimiter = delimitador)
 
     x = df[self.features_utilizadas]
     scaler = pickle.loads(self.normalizador_serializado)

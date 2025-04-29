@@ -34,13 +34,21 @@ def makePrev(model_id, dataset_id, user_id):
     previsao = prever(modeloObj, dsObj.caminho)
     resultados_json = previsao.tolist()
 
-    nova_prev = previsao(
-        resultados_json,
-        model_id,
-        dataset_id,
-        user_id
+    nova_prev = Previsao(
+        resultados = resultados_json,
+        modelo_id = model_id,
+        dataset_execucao_id = dataset_id,
+        utilizador_id = user_id
     )
 
+    try: 
+        db.session.add(nova_prev)
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        print(f"Erro ao guardar previsão: {e}")
+        return False
 
 
 
