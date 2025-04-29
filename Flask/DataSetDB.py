@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, LargeBinary, JSON, Boolean
 from sqlalchemy.orm import relationship
 import os
-from io import TextIOWrapper
+from io import BytesIO
 import csv
 import pandas as pd
 
@@ -50,6 +50,26 @@ def getDatasets(user_id):
     except Exception as e:
         db.session.rollback()  # Corrigido o rollback
         print(f"Erro ao encontrar Datasets: {e}")
+        return None
+    
+def getDatasetFeatures(id):
+    ds = getDatasetByID(id)
+    with open(ds.caminho, "rb") as f:
+                file_bytes = f.read()
+                buffer = BytesIO(file_bytes)
+                delimitador = obter_delimitador(buffer)
+
+                ds_features = pd.read_csv(BytesIO(file_bytes), delimiter=delimitador,
+                                     nrows=0, encoding='utf-8').columns.tolist()
+    return ds_features
+
+def getDatasetsForPrev():
+    try:
+        db_search = Dataset.query.filter(Dataset.is_treino == False).all()
+        return db_search
+    except Exception as e:
+        db.session.rollback
+        print(f"Erro ao encontrar Datasets para Previsão: {e}")
         return None
     
 def getDatasetByID(id):

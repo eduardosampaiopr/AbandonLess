@@ -15,7 +15,7 @@ import pickle
 import io
 import json
 
-from DataSetDB import obter_delimitador
+from DataSetDB import obter_delimitador, getDatasetFeatures
 class ModeloPreditivo(db.Model):
     __tablename__ = 'modelo_preditivo'
     
@@ -76,6 +76,19 @@ def addModels(modelo):
         db.session.rollback()
         print(f"Erro ao guardar Modelo: {e}")
         return 0
+
+def getCompatibleModels(ds_id):
+    ds_features = getDatasetFeatures(ds_id)
+    all_models = ModeloPreditivo.query.all()
+
+    modelos_compativeis = []
+
+    for modelo in all_models:
+        if set(modelo.features_utilizadas).issubset(set(ds_features)):
+            modelos_compativeis.append(modelo)
+
+    return modelos_compativeis
+
     
 def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id, ds_id):
 
@@ -259,3 +272,22 @@ def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, co
 )
     
     return(novo_modelo)
+
+
+def prever(self, dataset_path):
+    with open(dataset_path, "rb") as f:
+        file_bytes = f.read()
+        buffer = io.BytesIO(file_bytes)
+        delimitador = obter_delimitador(buffer)
+
+    df = pd.read_csv(io.BytesIO(file_bytes), delimeter = delimitador)
+
+    x = df[self.features_utilizadas]
+    scaler = pickle.loads(self.normalizador_serializado)
+    x_scaled = scaler.transform(x)
+        
+    modelo = pickle.loads(self.modelo_serializado)
+    previsoes_continuas = modelo.predict(x_scaled)
+    threshold = json.loads(self.hiper_parametros)["intervalo_admissao"]
+
+    return (previsoes_continuas >= threshold).astype(int)

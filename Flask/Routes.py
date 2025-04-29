@@ -2,7 +2,7 @@ from Main import app
 from flask import render_template, session, url_for, redirect, request, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, pandas as pd
-from io import BytesIO, TextIOWrapper
+from io import BytesIO
 
 import base64
 
