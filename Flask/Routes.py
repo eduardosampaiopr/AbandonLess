@@ -475,9 +475,30 @@ def previsaoIndex():
     else: 
         return redirect(url_for("login"))
     
-@app.route("/Previsao/NovaPrevisao", methods = ["POST", "GET"])
-def novaPrev():
+@app.route("/Previsao/NovaPrevisaoDS", methods = ["POST", "GET"])
+def novaPrevDS():
     if "user" in session:
-        return render_template("")
+        datasetsForPrev = getDatasetsForPrev(session["user"])
+        if not datasetsForPrev:
+            flash("Não existem datasets disponíveis para previsão.", "warning")
+            return redirect(url_for("previsaoIndex")) 
+        return render_template("Previsão/previsao_DS.html", current_page="Previsão", datasets = datasetsForPrev )
+    else:
+        return redirect(url_for("login"))
+    
+@app.route("/Previsao/NovaPrevisaoModel", methods = ["POST", "GET"])
+def novaPrevModel():
+    if "user" in session:
+        dataset_id = request.form.get("dataset_id")
+        if not dataset_id:
+            flash("Erro ao obter o id do conjunto de dados anteriormente selecionado.", "danger")
+            return redirect(url_for("novaPrevDS")) 
+    
+        models = getCompatibleModels(dataset_id)
+        if not models:
+            flash("Não foram encontrados modelos compatíveis com o dataset selecionado.", "warning")
+            return redirect(url_for("novaPrevDS"))
+        
+        return render_template("Previsão/previsao_DS.html", current_page="Previsão", modelos = models )
     else:
         return redirect(url_for("login"))

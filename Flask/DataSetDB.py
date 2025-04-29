@@ -63,9 +63,9 @@ def getDatasetFeatures(id):
                                      nrows=0, encoding='utf-8').columns.tolist()
     return ds_features
 
-def getDatasetsForPrev():
+def getDatasetsForPrev(id):
     try:
-        db_search = Dataset.query.filter(Dataset.is_treino == False).all()
+        db_search = Dataset.query.filter(Dataset.is_treino == False and Dataset.utilizador_id ==id).all()
         return db_search
     except Exception as e:
         db.session.rollback
