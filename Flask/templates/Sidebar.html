@@ -29,6 +29,18 @@
                         </a>
                     </li>
                 </ul>
+                {% if session["previsao_id"] %}
+                <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="previsao-menu2">
+                    <li>
+                        <a href="#" 
+                        class="submenu-item link-eliminar" 
+                        style="font-size: 0.9rem;"
+                        onclick="event.preventDefault(); confirmDeleteModel({{ session['previsao_id'] }});">
+                            <span>Eliminar Previsão</span>
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
             </li>
             {% if session["tipo_utilizador"] == "Data Scientist" %}
             <li class="nav-item">
@@ -130,6 +142,25 @@
     </div>
 </div>
 
+<!-- Modal de Confirmação de Eliminação de Previsão -->
+<div class="modal fade" id="confirmDeletePrevModal" tabindex="-1" aria-labelledby="confirmDeletePrevModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteprevModalLabel">Confirmar Eliminação da Previsão</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          De certeza que deseja eliminar esta Previsão? Esta ação não pode ser desfeita.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeletePrevButton">Eliminar</button>
+        </div>
+      </div>
+    </div>
+</div>
+
   
     
     <!--Script Para controlar os submenos de acordo com a página atual-->
@@ -143,6 +174,9 @@
             // Mostra apenas o submenu da página atual
             if (currentPage === "Previsão") {
                 document.getElementById("previsao-menu").style.display = "block";
+                document.getElementById("link-previsao").classList.add("active");
+            }else if (currentPage === "Previsão2") {
+                document.getElementById("previsao-menu2").style.display = "block";
                 document.getElementById("link-previsao").classList.add("active");
             } else if (currentPage === "Modelacao") {
                 document.getElementById("modelacao-menu").style.display = "block";
@@ -213,6 +247,35 @@
                                 }
                             })
                             .catch(error => console.error("Erro ao eliminar modelo:", error));
+                    }
+                });
+            });
+        </script>
+
+        <!--Script Eliminar Previsão-->
+        <script>
+            let previsaoIdParaEliminar = null;
+
+            function confirmDeleteModel(previsaoId) {
+                console.log("ID da Previsao recebida:", previsaoId);
+                previsaoIdParaEliminar = previsaoId;
+
+                const modalModel = new bootstrap.Modal(document.getElementById('confirmDeletePrevModal'));
+                modalModel.show();
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const confirmPrevButton = document.getElementById('confirmDeletePrevButton');
+                confirmPrevButton.addEventListener('click', function() {
+                    if (previsaoIdParaEliminar !== null) {
+                        fetch(`/removerPrevisao/${previsaoIdParaEliminar}`, { method: "POST" })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.location.href = "{{ url_for('previsaoIndex') }}"; 
+                                }
+                            })
+                            .catch(error => console.error("Erro ao eliminar previsão:", error));
                     }
                 });
             });

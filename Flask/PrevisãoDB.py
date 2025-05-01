@@ -62,11 +62,23 @@ def makePrev(model_id, dataset_id, user_id):
     try: 
         db.session.add(nova_prev)
         db.session.commit()
-        return True
+        return nova_prev.id
     except Exception as e:
         db.session.rollback()
         print(f"Erro ao guardar previsão: {e}")
         return False
+    
+def remPrev(id):
+    try:
+        db_search = Previsao.query.filter_by(id = id).first()
+        if db_search:
+            db.session.delete(db_search)
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        db.session.rollback()
+        print(f"Erro ao remover previsão com ID {id}: {e}")
 
 
 

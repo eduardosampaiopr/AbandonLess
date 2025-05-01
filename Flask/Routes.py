@@ -472,7 +472,10 @@ def removeModel(modelo_id):
 def previsaoIndex():
     if "user" in session:
         previsoes = getPrevByUser(session["id"])
-        return render_template("Previsão/Index.html", current_page="Previsão", previsoes = previsoes)
+        if previsoes:
+            return render_template("Previsão/Index.html", current_page="Previsão", previsoes = previsoes)
+        else:
+            return render_template("Previsão/Index.html", current_page="Previsão", previsoes = []) 
     else: 
         return redirect(url_for("login"))
     
@@ -509,9 +512,10 @@ def novaPrevCreate(dataset_id):
     if "user" in session:
         modelo_id = request.form.get("model_id")
         print(f"ID: {modelo_id}")
+        prev_id =  makePrev(modelo_id, dataset_id, session["id"])
         
-        if makePrev(modelo_id, dataset_id, session["id"]):
-            return redirect(url_for("verPrev", previsao_id = modelo_id))
+        if prev_id:
+            return redirect(url_for("verPrev", previsao_id = prev_id))
 
     else: 
         return redirect(url_for("login"))
@@ -519,11 +523,34 @@ def novaPrevCreate(dataset_id):
 @app.route("/Previsao/VerPrevisao<int:previsao_id>")
 def verPrev(previsao_id):
     if "user" in session:
+        session["previsao_id"] = previsao_id
         previsao = getPrevByID(previsao_id)
         if previsao:
-            return render_template("Previsão/Previsão_Resultado.html", current_page="Previsão", resultados = (previsao.resultados))
+            return render_template("Previsão/Previsão_Resultado.html", current_page="Previsão2", resultados = (previsao.resultados))
         else:
             flash("Erro ao apresentar detalhes da previsão.", "danger")
             return redirect(url_for("previsaoIndex"))
     else: 
         return redirect(url_for("login"))
+    
+@app.route("/removerPrevisao/<int:previsao_id>", methods=["POST"])
+def removePrev(previsao_id):
+    if "user" in session:
+        print(f"ID da previsao: {previsao_id}")
+        if remPrev(previsao_id):
+            session.pop("modelo_id", None)
+            return jsonify({"success": True, "message": "Previsão removida com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Previsão não encontrada."})
+
+    return jsonify({"success": False, "message": "É preciso estar logado."})
+
+#Remção de IDs da sessão quando não são necessários
+@app.before_request
+def limpar_sessoes_id():
+    if request.endpoint != 'verPrev':
+        session.pop('previsao_id', None)
+    if request.endpoint != 'verModelo':
+        session.pop('modelo_id', None)
+    if request.endpoint != 'verDataset':
+        session.pop('dataset_id', None)
