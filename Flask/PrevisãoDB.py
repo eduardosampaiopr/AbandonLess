@@ -27,6 +27,24 @@ class Previsao(db.Model):
     dataset_execucao = relationship('Dataset', back_populates='previsoes')
     utilizador = relationship('Utilizador', back_populates='previsoes')
 
+def getPrevByUser(user_id):
+    try:
+        search_db = Previsao.query.filter_by(utilizador_id = user_id).all()
+        if search_db:
+            return search_db
+        return None
+    except Exception as e:
+        print(f"Erro ao obter previsões do utilizador {user_id}: {e}")
+
+def getPrevByID(id):
+    try:
+        previsao = Previsao.query.filter_by(id=id).first()
+        if previsao:
+            return previsao
+        return None
+    except Exception as e:
+        print(f"Erro ao obter previsão com ID : {id}: {e}")
+
 def makePrev(model_id, dataset_id, user_id):
     modeloObj = getModelsByID(model_id)
     dsObj = getDatasetByID(dataset_id)

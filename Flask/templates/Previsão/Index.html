@@ -63,20 +63,22 @@
                     <table class="table table-bordered mt-4 table-fixed">
                         <thead>
                             <tr class="first">
+                                <th scope="col">ID</th>
                                 <th scope="col">Algoritmo</th>
                                 <th scope="col">Dataset</th>
-                                <th scope="col">Data</th>
+                                <th scope="col">Data de Criação</th>
                                 <th scope="col">Resultado</th>
                             </tr>
                         </thead>
                         <tbody class="table-body">
-                            {%for a in algoritmos%}
+                            {%for p in previsoes%}
                             <tr>
-                                <th scope="row">{{a.id}}</th>
-                                <td>{{a.dataset_execucao_id.nome}}</td>
-                                <td>{{a.data_criacao}}</td>
+                                <th scope="row">{{p.id}}</th>
+                                <td>{{p.modelo.nome}}</td>
+                                <td>{{p.dataset_execucao.nome}}</td>
+                                <td>{{p.data_criacao}}</td>
                                 <td class="lupaimg">
-                                    <a href="#">
+                                    <a href="{{url_for('verPrev', previsao_id = p.id)}}">
                                         <img class="lupa" src="{{ url_for('static', filename= '/Imagens/Icons/lupa.png')}}">
                                     </a>
                                 </td>

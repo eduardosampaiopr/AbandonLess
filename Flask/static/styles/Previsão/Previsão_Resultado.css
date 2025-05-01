@@ -1,0 +1,83 @@
+
+
+.iconlog{
+    max-height: 1.5em;
+}
+
+body {
+    font-family: 'Montserrat';
+}
+
+.icon-size {
+    max-height: 4em; 
+    width: auto;  
+}
+
+.filtro{
+    background-color: #D9D9D9;
+    border-radius: 10px;
+}
+
+.table thead th {
+    background-color: #5299E5 !important;
+    color: white !important;
+    position: sticky;
+    top: 0px;
+}
+
+.btn{
+    background-color: #5299E5 !important;
+    border-color: #5299E5;
+}
+
+
+.table{
+    border-collapse: collapse;
+}
+
+.table-responsive{
+    height: 25em;
+    overflow-y: auto;
+    
+}
+
+#btn-elim{
+    background-color: #FF0000 !important;
+    border-color: #FF0000;
+}
+
+#btn-back{
+    background-color: #D9D9D9 !important;
+    border-color: #D9D9D9;
+}
+
+.status {
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100%;
+}
+
+.status.abandono {
+    
+    color: #ff0000;
+}
+
+.status.permanencia {
+    color: #008000;
+}
+
+.w-auto {
+    width: 1%; 
+    white-space: nowrap;
+}
+
+
+.w-50 {
+    width: 20%; /* Ajuste conforme necessário */
+}
+
+.titulo{
+    font-size: 2.5em ;
+}

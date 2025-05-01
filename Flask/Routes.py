@@ -471,7 +471,8 @@ def removeModel(modelo_id):
 @app.route("/Previsao")
 def previsaoIndex():
     if "user" in session:
-        return render_template("Previsão/Index.html", current_page="Previsão")
+        previsoes = getPrevByUser(session["id"])
+        return render_template("Previsão/Index.html", current_page="Previsão", previsoes = previsoes)
     else: 
         return redirect(url_for("login"))
     
@@ -510,7 +511,19 @@ def novaPrevCreate(dataset_id):
         print(f"ID: {modelo_id}")
         
         if makePrev(modelo_id, dataset_id, session["id"]):
-            return("Sucesso")
+            return redirect(url_for("verPrev", previsao_id = modelo_id))
 
+    else: 
+        return redirect(url_for("login"))
+
+@app.route("/Previsao/VerPrevisao<int:previsao_id>")
+def verPrev(previsao_id):
+    if "user" in session:
+        previsao = getPrevByID(previsao_id)
+        if previsao:
+            return render_template("Previsão/Previsão_Resultado.html", current_page="Previsão", resultados = (previsao.resultados))
+        else:
+            flash("Erro ao apresentar detalhes da previsão.", "danger")
+            return redirect(url_for("previsaoIndex"))
     else: 
         return redirect(url_for("login"))
