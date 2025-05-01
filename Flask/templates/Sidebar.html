@@ -35,7 +35,7 @@
                         <a href="#" 
                         class="submenu-item link-eliminar" 
                         style="font-size: 0.9rem;"
-                        onclick="event.preventDefault(); confirmDeleteModel({{ session['previsao_id'] }});">
+                        onclick="event.preventDefault(); confirmDeletePrev({{ session['previsao_id'] }});">
                             <span>Eliminar Previsão</span>
                         </a>
                     </li>
@@ -147,7 +147,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="confirmDeleteprevModalLabel">Confirmar Eliminação da Previsão</h5>
+          <h5 class="modal-title" id="confirmDeletePrevModalLabel">Confirmar Eliminação da Previsão</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
         <div class="modal-body">
@@ -256,12 +256,12 @@
         <script>
             let previsaoIdParaEliminar = null;
 
-            function confirmDeleteModel(previsaoId) {
+            function confirmDeletePrev(previsaoId) {
                 console.log("ID da Previsao recebida:", previsaoId);
                 previsaoIdParaEliminar = previsaoId;
 
-                const modalModel = new bootstrap.Modal(document.getElementById('confirmDeletePrevModal'));
-                modalModel.show();
+                const modalPrev = new bootstrap.Modal(document.getElementById('confirmDeletePrevModal'));
+                modalPrev.show();
             }
 
             document.addEventListener('DOMContentLoaded', function() {
