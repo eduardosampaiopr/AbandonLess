@@ -90,7 +90,7 @@ def getCompatibleModels(ds_id):
     return modelos_compativeis
 
     
-def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id, ds_id):
+def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id, ds_id, col_id):
 
     with open(ds_path, 'rb') as buffer:
         delimitador = obter_delimitador(buffer)
@@ -98,7 +98,7 @@ def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id
     df = pd.read_csv(ds_path, delimiter = delimitador)
 
     # Modelos, feature e váriaveis objetivo
-    x = df.drop(columns=['Target'] + col_rem)
+    x = df.drop(columns=['Target'] + col_rem + [col_id])
     y = df['Target'].apply(lambda x: 1 if x == 'Dropout' else 0)
 
     modelo = LinearRegression()
@@ -188,14 +188,14 @@ def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id
     return(novo_modelo)
 
 
-def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, col_rem, user_id, ds_id):
+def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, col_rem, user_id, ds_id, col_id):
     with open(ds_path, 'rb') as buffer:
         delimitador = obter_delimitador(buffer)
 
     df = pd.read_csv(ds_path, delimiter = delimitador)
 
     # Modelos, feature e váriaveis objetivo
-    x = df.drop(columns=['Target'] + col_rem)
+    x = df.drop(columns=['Target'] + col_rem + [col_id])
     y = df['Target'].apply(lambda x: 1 if x == 'Dropout' else 0)
 
     modelo = LinearRegression()
@@ -274,7 +274,7 @@ def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, co
     return(novo_modelo)
 
 
-def prever(self, dataset_path):
+def prever(self, dataset_path, col_id):
     with open(dataset_path, "rb") as f:
         file_bytes = f.read()
         buffer = io.BytesIO(file_bytes)
@@ -289,5 +289,13 @@ def prever(self, dataset_path):
     modelo = pickle.loads(self.modelo_serializado)
     previsoes_continuas = modelo.predict(x_scaled)
     threshold = json.loads(self.hiper_parametros)["intervalo_admissao"]
+    previsoes_binarias = (previsoes_continuas >= threshold).astype(int)
 
-    return (previsoes_continuas >= threshold).astype(int)
+    ids_alunos  = df[col_id].astype(str).tolist()
+
+    resultados_json = [
+        {"aluno_id": aluno_id, "previsao": int(prev)}
+        for aluno_id, prev in zip(ids_alunos, previsoes_binarias)
+    ]
+
+    return resultados_json

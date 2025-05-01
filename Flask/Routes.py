@@ -449,7 +449,7 @@ def novoModeloCreate():
                     kfold_n = request.form.get("kfold_n")
                     kfold_n = int(kfold_n) #if kfold_n else 5
                     modelo = createModelLinearRegkold(ds.caminho, nome, threshold, kfold_n, colunas_remover
-                                                    , session["id"], ds.id )
+                                                    , session["id"], ds.id , ds.coluna_identificadora)
         
                 else:
                     split_ratio = request.form.get("split_ratio") 
@@ -593,7 +593,7 @@ def preparar_limpeza():
 @app.after_request
 def limpar_sessoes_id(response):
     if request.endpoint == "static":
-        return response  # Ignora recursos estáticos
+        return response 
 
     if not getattr(g, 'keep_prev', False):
         session.pop('previsao_id', None)

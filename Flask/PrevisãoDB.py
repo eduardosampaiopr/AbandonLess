@@ -49,11 +49,15 @@ def makePrev(model_id, dataset_id, user_id):
     modeloObj = getModelsByID(model_id)
     dsObj = getDatasetByID(dataset_id)
 
-    previsao = prever(modeloObj, dsObj.caminho)
-    resultados_json = previsao.tolist()
+    coluna_id = dsObj.coluna_identificadora
+    if not coluna_id :
+        print(f"A coluna de identificação '{coluna_id}' não foi encontrada no dataset.")
+        return False
+
+    previsao = prever(modeloObj, dsObj.caminho, coluna_id)
 
     nova_prev = Previsao(
-        resultados = resultados_json,
+        resultados = previsao,
         modelo_id = model_id,
         dataset_execucao_id = dataset_id,
         utilizador_id = user_id

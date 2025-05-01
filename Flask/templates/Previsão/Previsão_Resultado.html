@@ -69,8 +69,10 @@
                         <tbody class="table-body">
                             {%for r in resultados%}
                             <tr>
-                                <th class="text-center" scope="row">1</th>
-                                {%if r == 1%}
+                                <th class="text-center" scope="row">
+                                    {{r.aluno_id}}
+                                </th>
+                                {%if r.previsao == 1%}
                                 <td class="text-center status abandono">Abandono </td>
                                 {%else%}
                                 <td class="text-center status permanencia">Permanece </td>
@@ -110,8 +112,8 @@
         let linhas = document.querySelectorAll(".table-body tr");
         
         linhas.forEach(linha => {
-            let nomeAluno = linha.children[1].textContent.toLowerCase();
-            let resultado = linha.children[2].textContent.toLowerCase();
+            let nomeAluno = linha.children[0].textContent.toLowerCase();
+            let resultado = linha.children[1].textContent.toLowerCase();
             
             let matchAluno = alunoFiltro === "" || nomeAluno.includes(alunoFiltro);
             let matchResultado = resultadoFiltro === "selecionar resultado" || resultado.includes(resultadoFiltro);
