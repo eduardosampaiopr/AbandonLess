@@ -11,6 +11,10 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 
+app.config["SESSION_COOKIE_SECURE"] = False  
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+
 
 app = Flask(__name__)
 app.secret_key = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"

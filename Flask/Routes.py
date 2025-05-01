@@ -1,5 +1,5 @@
 from Main import app
-from flask import render_template, session, url_for, redirect, request, flash, jsonify
+from flask import render_template, session, url_for, redirect, request, flash, jsonify,g
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, pandas as pd
 from io import BytesIO
@@ -192,7 +192,7 @@ def ConjIndex():
 def NovoDataset():
     if "user" in session:
         flash("Caso deseje que o Dataset seja utilizado para treino de outros modelos, por favor certifique-se que a variável objetivo tem o nome 'Target' e está é binária.", "info")
-        flash("Caso o conjunto de dados contenha campos vazios, o sistema irá remover as linhas com esses campos.", "info")
+        flash("Caso o conjunto de dados contenha campos vazios, o sistema irá remover as linhas com falta de dados.", "info")
         if request.method == "POST":
             if "file" not in request.files:
                 flash("Nenhum Ficheiro Submetido.", "error")
@@ -259,8 +259,14 @@ def NovoDataset():
                 with open(file_path, 'wb') as f_out:
                     df.to_csv(f_out, index=False, encoding='utf-8')
 
-                createDataset(num_registos, session["id"], upload_file.filename, file_path, is_treino)
+                session["temp_dataset_path"] = file_path
+                session["temp_dataset_nome"] = upload_file.filename
+                session["temp_dataset_is_treino"] = is_treino
+                session.modified = True
 
+                print(f"var temporaria: {session['temp_dataset_path']}")
+                return redirect(url_for("SelecionarColunaIdentificadora"))
+    
             except Exception as e:
                 flash(f"Erro ao processar o ficheiro: {e}", "error")
                 return redirect(request.url)
@@ -269,6 +275,34 @@ def NovoDataset():
         return render_template("ConjuntoDeDados/novoConj.html", current_page="ConjuntosDeDados")
     else: 
         return redirect(url_for("login"))
+    
+@app.route("/SelecionarColunaIdentificadora", methods=["GET", "POST"])
+def SelecionarColunaIdentificadora():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    path = session["temp_dataset_path"]
+
+    with open(path, "rb") as f:
+        buffer = BytesIO(f.read())
+        buffer.seek(0)
+        df = pd.read_csv(buffer, nrows=0)
+        colunas = df.columns.tolist()
+
+    if request.method == "POST":
+        coluna_id = request.form.get("coluna_identificadora")
+        createDataset(
+            nome=session["temp_dataset_nome"],
+            caminho=path,
+            num_reg=pd.read_csv(path).shape[0],
+            utilizador_ID=session["id"],
+            is_treino=session["temp_dataset_is_treino"],
+            coluna_identificadora=coluna_id
+        )
+        
+        return redirect(url_for("ConjIndex"))
+
+    return render_template("ConjuntoDeDados/selecionar_coluna_id.html", colunas=colunas)
 
 
 @app.route("/ConjuntosDeDados/<int:dataset_id>")
@@ -547,10 +581,28 @@ def removePrev(previsao_id):
 
 #Remção de IDs da sessão quando não são necessários
 @app.before_request
-def limpar_sessoes_id():
-    if request.endpoint != 'verPrev':
+def preparar_limpeza():
+    endpoint = request.endpoint or ""
+
+    g.keep_temp_dataset = endpoint in {"NovoDataset", "SelecionarColunaIdentificadora"}
+    g.keep_prev = endpoint == "verPrev"
+    g.keep_modelo = endpoint == "verModelo"
+    g.keep_dataset = endpoint == "verDataset"
+
+
+@app.after_request
+def limpar_sessoes_id(response):
+    if request.endpoint == "static":
+        return response  # Ignora recursos estáticos
+
+    if not getattr(g, 'keep_prev', False):
         session.pop('previsao_id', None)
-    if request.endpoint != 'verModelo':
+    if not getattr(g, 'keep_modelo', False):
         session.pop('modelo_id', None)
-    if request.endpoint != 'verDataset':
+    if not getattr(g, 'keep_dataset', False):
         session.pop('dataset_id', None)
+    if not getattr(g, 'keep_temp_dataset', False):
+        session.pop("temp_dataset_path", None)
+        session.pop("temp_dataset_nome", None)
+        session.pop("temp_dataset_is_treino", None)
+    return response

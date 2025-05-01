@@ -19,12 +19,13 @@ class Dataset(db.Model):
     data_criacao = Column(DateTime, default=datetime.datetime.utcnow)
     data_atualizacao = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     is_treino = Column(Boolean, default=True)
+    coluna_identificadora = Column(String(255), nullable=False)
 
     utilizador = relationship('Utilizador', back_populates='datasets')
     modelos = relationship('ModeloPreditivo', back_populates='dataset_criacao')
     previsoes = relationship('Previsao', back_populates='dataset_execucao')
 
-def createDataset(num_reg, utilizador_ID, nome , caminho, is_treino):
+def createDataset(num_reg, utilizador_ID, nome , caminho, is_treino, coluna_identificadora):
 
     try:
         new_dataSet = Dataset(
@@ -32,10 +33,11 @@ def createDataset(num_reg, utilizador_ID, nome , caminho, is_treino):
             caminho=caminho,
             num_registos=num_reg,
             utilizador_id=utilizador_ID,
-            is_treino = is_treino
+            is_treino = is_treino,
+            coluna_identificadora = coluna_identificadora
         )
         db.session.add(new_dataSet)
-        db.session.commit()  # Corrigido o commit
+        db.session.commit()  
         print(f"{new_dataSet.nome} registado com sucesso!")
         return True
     except Exception as e:
