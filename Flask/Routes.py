@@ -1,5 +1,5 @@
 from Main import app
-from flask import render_template, session, url_for, redirect, request, flash, jsonify,g
+from flask import render_template, session, url_for, redirect, request, flash, jsonify,g, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, pandas as pd
 from io import BytesIO
@@ -560,7 +560,7 @@ def verPrev(previsao_id):
         session["previsao_id"] = previsao_id
         previsao = getPrevByID(previsao_id)
         if previsao:
-            return render_template("Previsão/Previsão_Resultado.html", current_page="Previsão2", resultados = (previsao.resultados))
+            return render_template("Previsão/Previsão_Resultado.html", current_page="Previsão2", resultados = (previsao.resultados), previsao_id = previsao_id)
         else:
             flash("Erro ao apresentar detalhes da previsão.", "danger")
             return redirect(url_for("previsaoIndex"))
@@ -578,6 +578,22 @@ def removePrev(previsao_id):
             return jsonify({"success": False, "message": "Previsão não encontrada."})
 
     return jsonify({"success": False, "message": "É preciso estar logado."})
+
+@app.route('/Previsao/VerPrevisao<int:previsao_id>/exportar')
+def exportar_previsoes(previsao_id):
+    prev = getPrevByID(previsao_id)
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["aluno_id", "resultado"])
+
+    for p in prev.resultados:
+        resultado_txt = "Abandono" if p["previsao"] == 1 else "Permanece"
+        writer.writerow([p["aluno_id"], resultado_txt])
+
+    response = Response(output.getvalue(), mimetype="text/csv")
+    response.headers["Content-Disposition"] = "attachment; filename=previsoes.csv"
+    return response
 
 #Remção de IDs da sessão quando não são necessários
 @app.before_request

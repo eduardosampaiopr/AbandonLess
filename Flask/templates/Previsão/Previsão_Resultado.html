@@ -88,12 +88,15 @@
                 <div class="d-flex justify-content-between mt-5">
 
                     <!--Botão Voltar-->
-                    <button type="submit" class="btn btn-custom px-3" id="btn-back">Voltar</button>
-                
+                    <a href="{{url_for('previsaoIndex')}}">
+                        <button type="submit" class="btn btn-custom px-3" id="btn-back">Voltar</button>
+                    </a>
 
                     <!--Botão Exportar-->
                     <div class="exportar">
-                        <button type="submit" class="btn btn-primary btn-custom px-5 ">Exportar</button>
+                        <a href="{{ url_for('exportar_previsoes', previsao_id=previsao_id) }}">
+                            <button type="submit" class="btn btn-primary btn-custom px-5 ">Exportar</button>
+                        </a>
                     </div>
 
                 </div>
