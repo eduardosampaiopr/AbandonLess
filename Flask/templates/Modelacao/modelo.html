@@ -29,6 +29,10 @@
                         <label for="Nome" class="form-label mb-0 me-2">Nome:</label>
                         <div class="info-box">{{ modelo.nome }}</div>
                     </div>
+                    <div class="info-group d-flex align-items-center">
+                        <label for="Nome" class="form-label mb-0 me-2">Tipo de modelo:</label>
+                        <div class="info-box">{{ modelo.tipo_modelo }}</div>
+                    </div>
 
                     <div class="info-group d-flex align-items-center">
                         <label for="Data" class="form-label mb-0 me-2">Data de Criação:</label>
@@ -71,7 +75,7 @@
                     </div>
 
                     <!-- Imagem Matriz de Confusão -->
-                    <div class="me-5 mt-2">
+                    <div class="me-3 mt-2 ms-2">
                         <img src="data:image/png;base64,{{ imagem_matriz_confusao }}" class="img-thumbnail">
                     </div>
                 </div>
@@ -86,10 +90,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">Tipo de Modelo</th>
-                                <td>{{ hiper_parametros.tipo_modelo }}</td>
-                            </tr>
                             <tr>
                                 <th scope="row">Threshold</th>
                                 <td>{{ hiper_parametros.intervalo_admissao }}</td>

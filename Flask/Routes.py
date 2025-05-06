@@ -416,6 +416,12 @@ def novoModeloForm():
                     buffer.seek(0)
                     df = pd.read_csv(buffer, delimiter=delimitador)
                     columns = df.columns.tolist()
+                    if dataset.coluna_identificadora in columns:
+                        columns.remove(dataset.coluna_identificadora)
+
+                    if "Target" in columns:
+                        columns.remove("Target")
+
 
                 except Exception as e:
                     flash(f"Erro ao processar o ficheiro: {e}", "error")
@@ -455,7 +461,7 @@ def novoModeloCreate():
                     split_ratio = request.form.get("split_ratio") 
                     split_ratio = float(split_ratio) if split_ratio else 0.8
                     modelo = createModelLinearRegTrainTestSplit(ds.caminho, nome, threshold, split_ratio, colunas_remover
-                                                    , session["id"], ds.id ) 
+                                                    , session["id"], ds.id, ds.coluna_identificadora ) 
                 
                 if addModels(modelo):
                     return render_template('Modelacao/modelo.html',modelo=modelo, metricas=json.loads(modelo.metricas),
