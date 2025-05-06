@@ -99,6 +99,18 @@ def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id
 
     # Modelos, feature e váriaveis objetivo
     x = df.drop(columns=['Target'] + col_rem + [col_id])
+
+    #Features utilizadas
+    features_utilizadas = x.columns.tolist()
+
+    #Feature Engineering aplicado ao dataset que foi utilizado para estudo no Projeto
+    if ("Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)") in df.columns:
+        df["Media_Creditada"] = df[["Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)"]].mean(axis=1)  # Calcula a média linha a linha
+        x = x.drop(columns=["Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)"])
+    elif ("Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)") in df.columns:
+         df["Media_Incrita"] = df[["Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)"]].mean(axis=1)
+         x = x.drop(columns = ["Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)"])
+
     y = df['Target'].apply(lambda x: 1 if x == 'Dropout' else 0)
 
     modelo = LinearRegression()
@@ -149,9 +161,6 @@ def createModelLinearRegkold(ds_path, nome, threshold, kfold_n, col_rem, user_id
     img_buffer.seek(0)
     imagem_matriz_confusao_bin = img_buffer.read()
     
-    #Features utilizadas
-    features_utilizadas = x.columns.tolist()
-
     #serialização do modelo e normalizador
     modelo_serializado = pickle.dumps(modelo)
     norm_ser = pickle.dumps(scaler)
@@ -193,9 +202,20 @@ def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, co
         delimitador = obter_delimitador(buffer)
 
     df = pd.read_csv(ds_path, delimiter = delimitador)
+    x = df.drop(columns=['Target'] + col_rem + [col_id])
+
+    #Features utilizadas
+    features_utilizadas = x.columns.tolist()
+
+    #Feature Engineering aplicado ao dataset que foi utilizado para estudo no Projeto
+    if ("Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)") in df.columns:
+        df["Media_Creditada"] = df[["Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)"]].mean(axis=1)  # Calcula a média linha a linha
+        x = x.drop(columns=["Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)"])
+    elif ("Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)") in df.columns:
+         df["Media_Incrita"] = df[["Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)"]].mean(axis=1)
+         x = x.drop(columns = ["Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)"])
 
     # Modelos, feature e váriaveis objetivo
-    x = df.drop(columns=['Target'] + col_rem + [col_id])
     y = df['Target'].apply(lambda x: 1 if x == 'Dropout' else 0)
 
     modelo = LinearRegression()
@@ -234,8 +254,7 @@ def createModelLinearRegTrainTestSplit(ds_path, nome, threshold, split_ratio, co
     img_buffer.seek(0)
     imagem_matriz_confusao_bin = img_buffer.read()
     
-    #Features utilizadas
-    features_utilizadas = x.columns.tolist()
+    
 
     #serialização do modelo e normalizador
     modelo_serializado = pickle.dumps(modelo)
@@ -283,6 +302,14 @@ def prever(self, dataset_path, col_id):
     df = pd.read_csv(io.BytesIO(file_bytes), delimiter = delimitador)
 
     x = df[self.features_utilizadas]
+
+    if ("Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)") in df.columns:
+        df["Media_Creditada"] = df[["Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)"]].mean(axis=1)  # Calcula a média linha a linha
+        x = x.drop(columns=["Curricular units 1st sem (credited)", "Curricular units 2nd sem (credited)"])
+    elif ("Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)") in df.columns:
+         df["Media_Incrita"] = df[["Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)"]].mean(axis=1)
+         x = x.drop(columns = ["Curricular units 1st sem (enrolled)","Curricular units 2nd sem (enrolled)"])
+
     scaler = pickle.loads(self.normalizador_serializado)
     x_scaled = scaler.transform(x)
         
