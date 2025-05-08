@@ -98,7 +98,7 @@
                                         {%else%}
                                         <td>Previsão</td>
                                         {%endif%}
-                                        <td>{{d.data_upload}}</td>
+                                        <td>{{d.data_upload.strftime('%d-%m-%Y')}}</td>
                                         <td class="text-center" >
                                             <button type="button" class="btn btn-primary btn-custom selecionar">
                                                 Selecionar

@@ -51,7 +51,7 @@
                                             {%else%}
                                             <td>Previsão</td>
                                             {%endif%}
-                                            <td>{{d.data_upload}}</td>
+                                            <td>{{d.data_upload.strftime('%d-%m-%Y')}}</td>
                                             <td class="text-center" >
                                                 <a href="{{ url_for('verDataset',  dataset_id=d.id)}}">
                                                     <img src="{{url_for('static', filename='/Imagens/icons/lupa.png')}}" class="icon">

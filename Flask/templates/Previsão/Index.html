@@ -78,7 +78,7 @@
                                 <th scope="row">{{p.id}}</th>
                                 <td>{{p.modelo.nome}}</td>
                                 <td>{{p.dataset_execucao.nome}}</td>
-                                <td>{{p.data_criacao}}</td>
+                                <td>{{p.data_criacao.strftime('%d-%m-%Y')}}</td>
                                 <td class="lupaimg">
                                     <a href="{{url_for('verPrev', previsao_id = p.id)}}">
                                         <img class="lupa" src="{{ url_for('static', filename= '/Imagens/Icons/lupa.png')}}">

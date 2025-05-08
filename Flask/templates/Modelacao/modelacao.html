@@ -60,7 +60,7 @@
                             <tr>
                                 <td class="font-weight-bold">{{m.nome}}</td>
                                 <td>{{m.tipo_modelo}}</td>
-                                <td>{{m.data_criacao}}</td>
+                                <td>{{m.data_criacao.strftime('%d-%m-%Y')}}</td>
                                 <td>{{m.utilizador.nome}}</td>
                                 <td class="text-center" >
                                     <a href="{{url_for('verModelo', modelo_id=m.id)}}">
