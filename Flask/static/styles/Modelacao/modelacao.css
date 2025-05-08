@@ -25,6 +25,11 @@ body {
     border-color: #5299E5;
 }
 
+#btn-back{
+    background-color: #D9D9D9 !important;
+    border-color: #D9D9D9;
+    min-width: 10em;
+}
 
 
 .table{
