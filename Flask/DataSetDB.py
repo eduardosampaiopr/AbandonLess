@@ -65,12 +65,12 @@ def getDatasetFeatures(id):
                                      nrows=0, encoding='utf-8').columns.tolist()
     return ds_features
 
-def getDatasetsForPrev(id):
+def getDatasetsForPrev(user_id):
     try:
-        db_search = Dataset.query.filter(Dataset.is_treino == False and Dataset.utilizador_id ==id).all()
+        db_search = Dataset.query.filter_by(utilizador_id=user_id, is_treino=False).all()
         return db_search
     except Exception as e:
-        db.session.rollback
+        db.session.rollback()
         print(f"Erro ao encontrar Datasets para Previsão: {e}")
         return None
     

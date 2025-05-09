@@ -387,6 +387,9 @@ def novoModeloDS():
     if "user" in session:
         if session["tipo_utilizador"] == "Data Scientist":
             datasets = getTrainDataset(session["id"])
+            if not datasets:
+                flash("Não existem datasets disponíveis para treino de modelos.", "warning")
+                return redirect(url_for("modeloIndex"))
             return render_template("Modelacao/modelacao_DS.html", datasets = datasets)
         else:
             flash("Não tens permissão para aceder à página de modelação.", "danger")
@@ -522,7 +525,8 @@ def previsaoIndex():
 @app.route("/Previsao/NovaPrevisaoDS", methods = ["POST", "GET"])
 def novaPrevDS():
     if "user" in session:
-        datasetsForPrev = getDatasetsForPrev(session["user"])
+        datasetsForPrev = getDatasetsForPrev(session["id"])
+        print(f"datasets: {datasetsForPrev}")
         if not datasetsForPrev:
             flash("Não existem datasets disponíveis para previsão.", "warning")
             return redirect(url_for("previsaoIndex")) 
