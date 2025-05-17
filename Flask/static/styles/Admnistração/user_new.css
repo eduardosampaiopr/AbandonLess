@@ -1,34 +1,4 @@
-.nav-item{
-    background-color: #5299E5;
-    margin: 20px;
-    text-align: center;
-    border-radius: 10px;
-    font-size:x-large;
-}
-.nav-link.active {
-    background-color: #C8C5C5 !important; 
-    color: black !important; 
-    border-radius: 10px;
-}
 
-.col-auto{
-    background-color: #5299E5;
-    align-items: center;
-    min-width: 15%;
-    max-width: 30%;
-}
-
-.LogOut {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;  
-    padding-left: 10px; 
-    font-size:larger;
-}
-
-.iconlog{
-    max-height: 1.5em;
-}
 
 body {
     font-family: 'Montserrat';
@@ -104,21 +74,7 @@ select option {
     max-width: 80%;
 }
 
-.subitem .nav-link{
-    background: #5299E5 !important;
-    background-color:#5299E5 !important;
-    color: black;
-}
 
-.subitem:hover{
-    text-decoration: underline;
-}
-
-.subitem .nav-link.active {
-    background-color: #5299E5!important ;
-    background: #5299E5 !important; /* Sem fundo quando ativo */
-    font-weight: bold; /* Destaque quando ativo */
-}
 
 .NovoUtilizador {
     color: black;
@@ -141,4 +97,59 @@ select option {
 
 a{
     color: black;
+}
+
+.nav-item {
+    background-color: #EBEBEB;
+    margin: 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: x-large;
+}
+
+.nav-link.active {
+    background-color: #C8C5C5 !important;
+    color: black !important;
+    border-radius: 10px;
+}
+
+.nav-item:hover {
+    background-color: #8d8d8d;
+}
+
+.col-auto {
+    background-color: #5299E5;
+    min-width: 15%;
+    max-width: 30%;
+    align-items: center;
+}
+
+.logo {
+    max-width: 80%;
+}
+
+.main:hover {
+    text-decoration: underline;
+}
+
+.LogOut {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding-left: 10px;
+    font-size: larger;
+}
+
+.iconlog {
+    max-height: 1.5em;
+}
+
+.submenu-item {
+    font-size: 0.9rem;
+    color: black;
+    text-decoration: none;
+}
+
+.submenu-item:hover {
+    text-decoration: underline;
 }
