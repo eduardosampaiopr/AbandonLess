@@ -15,32 +15,33 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-auto min-vh-100">
-                <div class="pt-4 pb-1 ms-3">
-                    <a href="" class="text-black text-decoration-none">
-                        <img src="{{url_for('static',filename = 'Imagens/AbandonLessLogo.png')}}" alt="AbandonLessLogo" class="logo">
-                    
+                <div class="pt-4 pb-1 px-2">
+                    <a href="#" class="text-black text-decoration-none d-flex align-items-center">
+                        <img src="{{url_for('static', filename='/Imagens/AbandonLessLogo.png')}}" alt="AbandonLessLogo" class="logo">
                     </a>
                 </div>
                 <hr class="text-white">
-                <ul class="nav nav-pills flex-column mb-auto">
+                <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active">
-                         <span class="d-none d-sm-inline ">Administração</span>
+                        <a href="{{ url_for('adminMain', username=session['user']) }}" class="nav-link text-black active" id="link-admin">
+                            <span class="d-none d-sm-inline main">Administração</span>
                         </a>
-                        <ul class="subitem">
+                        <ul class="nav flex-column ms-3 submenu" id="admin-menu" style="gap: 4px; padding-top: 4px;">
                             <li>
-                                <a href="{{ url_for('userCreate', username=session['user']) }}" class="nav-link text-black">
-                                    <span class="NovoUtilizador ms-5">Criar novo Utilizador</span>
+                                <a href="{{ url_for('userCreate', username=session['user']) }}" class="text-black submenu-item"
+                                    style="text-decoration: none; font-size: 0.9rem;"
+                                    onmouseover="this.style.textDecoration='underline'"
+                                    onmouseout="this.style.textDecoration='none'">
+                                    <span>Criar novo Utilizador</span>
                                 </a>
+                            </li>
                         </ul>
                     </li>
-                    
+                </ul>
                 <div class="LogOut">
-                    <img class="iconlog" src="{{url_for('static',filename = 'Imagens/icons/logout.png')}}">
-                <a href="{{ url_for('logout') }}" class="text-unnderlined text-black">
-                    LogOut
-                </a>  
-                </div>
+                    <img class="iconlog" src="{{url_for('static', filename='/Imagens/icons/logout.png')}}" alt="logout icon">
+                    <a href="{{ url_for('logout') }}" class="text-black">LogOut</a>
+            </div>
             </div>
             <div class="col p-4 d-flex flex-column min-vh-100 " id="main-content">
                 <!--div titulo -->

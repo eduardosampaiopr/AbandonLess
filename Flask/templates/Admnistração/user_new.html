@@ -16,29 +16,31 @@
         <div class="row">
             <div class="col-auto min-vh-100">
                 <div class="pt-4 pb-1 px-2">
-                    <a href="" class="text-black text-decoration-none">
+                    <a href="#" class="text-black text-decoration-none d-flex align-items-center">
                         <img src="{{url_for('static', filename='/Imagens/AbandonLessLogo.png')}}" alt="AbandonLessLogo" class="logo">
-                    
                     </a>
                 </div>
                 <hr class="text-white">
-                <ul class="nav nav-pills flex-column mb-auto">
+                <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active">
-                            <span class="d-none d-sm-inline ">Administração</span>
+                        <a href="{{url_for('adminMain',username = session['user'])}}" class="nav-link text-black active" id="link-admin">
+                            <span class="d-none d-sm-inline main">Administração</span>
                         </a>
-                        <ul class="subitem">
-                            
-                                <a href="#">
-                                    <span class="NovoUtilizador ms-5 ">Criar novo Utilizador</span>
+                        <ul class="nav flex-column ms-3 submenu" style="gap: 4px; padding-top: 4px;" id="admin-menu">
+                            <li>
+                                <a href="#" class="text-black submenu-item"
+                                style="text-decoration: none; font-size: 0.9rem;"
+                                onmouseover="this.style.textDecoration='underline'"
+                                onmouseout="this.style.textDecoration='none'">
+                                    <span>Criar novo Utilizador</span>
                                 </a>
+                            </li>
                         </ul>
-                    </li>  
+                    </li>
+                </ul>
                 <div class="LogOut">
-                    <img class="iconlog" src="{{url_for('static', filename='/Imagens/icons/logout.png')}}">
-                <a href="{{ url_for('logout') }}" class="text-unnderlined text-black">
-                    LogOut
-                </a>  
+                    <img class="iconlog" src="{{url_for('static', filename='/Imagens/icons/logout.png')}}" alt="logout icon">
+                    <a href="{{ url_for('logout') }}" class="text-black">LogOut</a>
                 </div>
             </div>
 
