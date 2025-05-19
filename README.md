@@ -16,7 +16,7 @@
 
 ## Estrutura da Base de Dados
     A base de dados usada é MySQL. A estrutura pode ser visualizada no diagrama abaixo:
-    ![Estrutura da Base de Dados](docs/db_schema.png)
+![Estrutura da Base de Dados](docs/db_schema.png)
 
 ## Exemplo de .env
     FLASK_SECRET_KEY = "YourSecretKey"
