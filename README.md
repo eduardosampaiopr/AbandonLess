@@ -13,6 +13,15 @@
 
 ## Instalação:
     pip install -r requirements.txt
+
+## Estrutura da Base de Dados
+    A base de dados usada é MySQL. A estrutura pode ser visualizada no diagrama abaixo:
+    ![Estrutura da Base de Dados](docs/db_schema.png)
+
+## Exemplo de .env
+    FLASK_SECRET_KEY = "YourSecretKey"
+    DATABASE_URI=mysql://user:password@localhost/abandonless_db
+    
 ## Execução:
      Windows: Python Flask/Main.py
      MacOS:   Python3 Flask/Main.py
